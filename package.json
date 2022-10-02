@@ -21,5 +21,9 @@
       "scopeName": "source.4rpl",
       "path": "./syntaxes/4rpl.tmLanguage.json"
     }]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Up-Level/4rpl-lang.git"
   }
 }
