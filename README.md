@@ -1,6 +1,6 @@
 # 4rpl-lang README
 
-Syntax Highlighting support for Creeper World 4's 4RPL language. This is my first time making an extension, so expect issues. 
+Syntax Highlighting support in VSCode for Creeper World 4's 4RPL language. This is my first time making an extension, so expect issues. 
 
 ## Features
 
