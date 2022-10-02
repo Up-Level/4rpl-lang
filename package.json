@@ -1,0 +1,25 @@
+{
+  "name": "4rpl-lang",
+  "displayName": "4rpl-lang",
+  "description": "VSCode syntax highlighting for 4RPL",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "4rpl",
+      "aliases": ["4RPL", "4rpl"],
+      "extensions": [".4rpl"],
+      "configuration": "./language-configuration.json"
+    }],
+    "grammars": [{
+      "language": "4rpl",
+      "scopeName": "source.4rpl",
+      "path": "./syntaxes/4rpl.tmLanguage.json"
+    }]
+  }
+}
