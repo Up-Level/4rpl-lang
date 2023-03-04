@@ -9,22 +9,22 @@ patterns:
 - include: "#support"
 
 repository:
-  #entities:
-  #  patterns:
-  #  - name: entity.name.function.define.4rpl
-  #    match: ":\\w+"
-  #  - name: entity.name.function.call.4rpl
-  #    match: "@\\w+"
+  entities:
+    patterns:
+    - name: entity.name.function.define.4rpl
+      match: ":\\w+"
+    - name: entity.name.function.call.4rpl
+      match: "@\\w+"
 
-  #meta:
-    #patterns:
-    #- name: meta.function.4rpl
-    #  begin: :\w+
-    #  end: "(?=:\\w)"
-    #  captures:
-    #    "0":
-    #      patterns:
-    #        - include: "#language"
+  meta:
+    patterns:
+    - name: meta.function.4rpl
+      begin: :\w+
+      end: "(?=:\\w)"
+      captures:
+        "0":
+          patterns:
+            - include: "#language"
 
   expression:
     patterns:
