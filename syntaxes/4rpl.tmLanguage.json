@@ -6,6 +6,9 @@
       "include": "#keywords"
     },
     {
+      "include": "#entities"
+    },
+    {
       "include": "#strings"
     },
     {
@@ -19,43 +22,6 @@
     }
   ],
   "repository": {
-    "entities": {
-      "patterns": [
-        {
-          "name": "entity.name.function.define.4rpl",
-          "match": ":\\w+"
-        },
-        {
-          "name": "entity.name.function.call.4rpl",
-          "match": "@\\w+"
-        }
-      ]
-    },
-    "meta": {
-      "patterns": [
-        {
-          "name": "meta.function.4rpl",
-          "begin": ":\\w+",
-          "end": "(?=:\\w)",
-          "captures": {
-            "0": {
-              "patterns": [
-                {
-                  "include": "#language"
-                }
-              ]
-            }
-          }
-        }
-      ]
-    },
-    "expression": {
-      "patterns": [
-        {
-          "include": "#strings"
-        }
-      ]
-    },
     "keywords": {
       "patterns": [
         {
@@ -77,6 +43,18 @@
         {
           "name": "keyword.operator.comparator.4rpl",
           "match": "(?<=[\\s\\A\\[\\(])(==|>|<|>=|<=|!=|\\b(?i)(eq|eq0|gt|gt0|gte|gte0|lt|lt0|lte|lte0|neq|neq0)\\b)(?=[\\s\\A\\]\\)])"
+        }
+      ]
+    },
+    "entities": {
+      "patterns": [
+        {
+          "name": "entity.name.function.define.4rpl",
+          "match": ":\\w+"
+        },
+        {
+          "name": "entity.name.function.call.4rpl",
+          "match": "@\\w+"
         }
       ]
     },
@@ -107,7 +85,7 @@
       "patterns": [
         {
           "name": "variable.other.initvar.4rpl",
-          "match": "^\\${1,2}[^\\$]*:"
+          "match": "^\\${1,2}\\w+:"
         },
         {
           "name": "variable.other.iterator.4rpl",
