@@ -1,0 +1,73 @@
+name: 4rpl
+scopeName: source.4rpl
+patterns:
+#- include: "#meta"
+- include: "#keywords"
+- include: "#strings"
+- include: "#constants"
+- include: "#variables"
+- include: "#support"
+
+repository:
+  #entities:
+  #  patterns:
+  #  - name: entity.name.function.define.4rpl
+  #    match: ":\\w+"
+  #  - name: entity.name.function.call.4rpl
+  #    match: "@\\w+"
+
+  #meta:
+    #patterns:
+    #- name: meta.function.4rpl
+    #  begin: :\w+
+    #  end: "(?=:\\w)"
+    #  captures:
+    #    "0":
+    #      patterns:
+    #        - include: "#language"
+
+  expression:
+    patterns:
+    - include: "#strings"
+
+  keywords:
+    patterns:
+    - name: keyword.control.4rpl
+      match: \b(?i)(if|endif|else|while|endwhile|repeat|do|loop|case|endcase|switch|endswitch|once|endonce|return|break)\b
+    - name: comment.line.number-sign.4rpl
+      match: "#.*"
+    - name: keyword.operator.arithmetic.4rpl
+      match: (?<=[\s\A\[\(])(\+|-|\*|\/|%|\^|\b(?i)(add|sub|mul|div|mod|mod2|pow)\b)(?=[\s\A\]\)])
+    - name: keyword.operator.logic.4rpl
+      match: (?<=[\s\A\[\(])(!|&&|\|\||\b(?i)(and|not|or|xor)\b)(?=[\s\A\]\)])
+    - name: keyword.operator.comparator.4rpl
+      match: (?<=[\s\A\[\(])(==|>|<|>=|<=|!=|\b(?i)(eq|eq0|gt|gt0|gte|gte0|lt|lt0|lte|lte0|neq|neq0)\b)(?=[\s\A\]\)])
+  
+  strings:
+    name: string.quoted.double.4rpl
+    begin: "\""
+    end: "\""
+    patterns:
+    - name: constant.character.escape.4rpl
+      match: "\\\\."
+
+  constants:
+    patterns:
+    - name: constant.language.4rpl
+      match: \b(?i)(true|false|null|pi|halfpi|quarterpi|deg2rad|rad2deg|self|tau|threehalvespi|threequarterpi|twopi|vector0)\b
+    - name: constant.numeric.4rpl
+      match: (\-?\d*\.?\d+)
+
+  variables:
+    patterns:
+    - name: variable.other.initvar.4rpl
+      match: "^\\${1,2}[^\\$]*:"
+    - name: variable.other.iterator.4rpl
+      match: "(?<=[\\s\\A\\[\\(])(?i)(i|j|k)(?=[\\s\\z\\]\\)])"
+    - name: variable.name.4rpl
+      match: "(->|<-|-\\?|--)\\*?\\w*(\\.(?i)[xyzwrgba0123])?"
+
+  support:
+        patterns:
+        - name: support.function.generic.4rpl
+          match: "\\b(?i)(abs|acos|acquiremissionobjective|add|addaswareholder|addcreeper|addcreeperinrange|addcreeperwithcap|addcreeperwithcapinrange|and|appendstacktolist|appendtolist|applytheme|applytodamagemap|approximately|asfloat|asin|asint|asstring|atan|atan2|attachbeam|avg2|ballisticarclateral|ballisticarcpos|blitfaderaster|blitraster|bounceedgecollision|bouncefadeblack|bounceterraincollision|break|cancel|ceil|clamp|clamp01|clearglobals|clearlist|clearlocals|clearraster|clearstack|clearthemeoverlay|cleartracelog|clearunitspecifiedtarget|clearunitstun|clipcreeperline|closegamemessage|comma|comment|concat|concat3|concat4|constructunit|convertactocreeper|convertcreepertoac|copy|cos|cr|createbeam|createeffect|createegg|createlist|createliststartingsize|createmissile|createmist|createorb|createsnipershot|createtable|createthemeoverlay|createtrail|createunit|createunitonterrain|cross|damagecreeper|damagemesh|damageunit|debug|debugallsp|deepcopy|deg2rad|deployunitshield|deregisterformsg|deregisterscript|destroyallattachedbeams|destroyallbeams|destroybeam|destroyterrainrangeindicator|destroythemeoverlay|destroytrail|destroyunit|distance|distancecell|distancepointline|div|do|dot|dq|dup|dup2|e|editaddundo|editredo|editrestoreundo|elapsedtime|else|endif|endmission|endonce|endswith|endwhile|eq|eq0|ev2|ev3|ev4|false|fc|findunitenemy|floodfillterrain|floor|fromcell|func_selected|func_warepacketsent|generateenergy|getadalogopen|getbuildunit|getcameramode|getcameraposition|getcamerarotation|getcameratopdown|getcanmoveunits|getcelloccupiedcount|getcreeper|getcreepercoverage|getcreepercutoff|getcreeperinrange|getcreeperwithdamagemap|getcrimson|getdecalcolor|getdecalposition|getdecalsize|getdecalvisible|getdefaultcameraposition|getecocounts|geteditmode|getenergybonus|getenergyeco|getenergygeneration|getenergystore|getenergyuse|geternportal|geternportalefficiency|getexactcreeperheight|getexactterrain|getexactterrainandnormal|getexactterrainwithshield|getfactory|getfactorywares|getfieldcell|getfinaldialogopen|getflow|getgameframecount|getgametickcount|getgameupdatecount|getgloballist|getglobaltable|getkey|getkeydown|getlastexecutioncount|getlistcount|getlistelement|getmappedkey|getmappedkeydown|getmappedkeystrings|getmapsize|getmaxaccell|getmaxcreepercell|getmaxcreepercellwithdamage|getmeshhealth|getminaccell|getmincreepercell|getmincreepercellwithdamage|getminermode|getmissionobjectiveenabled|getmissionobjectiverequired|getmissionobjectivestate|getmissionscancomplete|getmousebutton|getmousebuttondown|getmousebuttonup|getmousedelta|getmousescrolldelta|getmverseplayernum|getmverseplayers|getnearestairsac|getnearestsnipertarget|getnearestspore|getobjactive|getobjcolor|getobjfacingangle|getobjfacinganglecell|getobjforward|getobjposition|getobjrotation|getobjscale|getopenbuildtab|getorbitalcount|getpause|getpointerterraincoords|getprintprefixenabled|getrandmapcell|getregisteredscriptvar|getriftlab|getrplcamforward|getrplcamposition|getrplcamright|getrplcamrotation|getrplcamup|getscript1var|getscriptvar|getselectedunits|getsoylentmode|gettablecount|gettableelement|gettablekeys|gettablevalues|getterraformdigsite|getterraformmarker|getterraformmenuopen|getterrain|getterrainlos|getterrainoverride|getterrainspecial|getterrainvector|getthemeclifflight|getthemeclifflightboost|getthemecliffnormal|getthemecliffnormalamt|getthemecliffnormalscale|getthemecliffscale|getthemeclifftexture|getthemenormal|getthemenormalamt|getthemenormalscale|getthemetexture|getthemetexturedetile|getthemetexturelight|getthemetexturelightboost|getthemetexturescale|gettimer0|gettimer1|gettimer2|gettimer3|gettimestring|gettotalac|gettotalcreeper|gettotemactivated|gettype|getundercreepereffectenabled|getunitammo|getunitammoware|getunitanticreeperdamages|getunitarmed|getunitbuildlimit|getunitbuildware|getunitcanbuild|getunitcandestroy|getunitcanmove|getunitcanstun|getunitcell|getunitconnectable|getunitconnectedtoriftlab|getunitconstructing|getunitconstructingdata|getunitcount|getunitcreeperdamages|getunitdamagedbyac|getunitdamagedbycreeper|getunitdestroyed|getunitdestroyunevenland|getunitenabled|getuniternsimulated|getuniternstate|getunitfireoffset|getunitfootprintresistscreeperheight|getunitforward|getunitgrowsmesh|getunithealrate|getunithealth|getunitincreeper|getunitlosenabled|getunitmaxammo|getunitmaxhealth|getunitmovecell|getunitoccupiesland|getunitofficialname|getunitpacketrequestrate|getunitposition|getunitrange|getunitrangewithmods|getunitrequestpackets|getunitrotation|getunits|getunitsbytype|getunitselectable|getunitselected|getunitsettings|getunitshieldrange|getunitsinrange|getunitspecialtarget|getunitspecifiedtarget|getunitstuncount|getunitsupplied|getunitsuppresscount|getunitsuppressmovement|getunittargetoffset|getunittrueguid|getunittype|getunituioptions|getunituistate|getunituitext|getunitupdatecount|getvoidheight|gt|gt0|gte|gte0|halfpi|i|if|insertlistelement|invocationcount|isadamessageread|isadamessageshowing|isbeam|isbuildunitselected|iscreepercutoff|isgamemessageshowing|ismissioncomplete|isnull|isv2inmap|isv3inmap|j|k|lf|list|listcontains|listn|ln|log|log10|loop|lt|lt0|lte|lte0|magnitude|max|min|mod|mod2|movetowards|movetowardsandavoid|movetowardscellandavoid|msg_frameadvance|msg_postupdate|msg_preupdate|msg_savegame|mul|nearestspecialtarget|neg|neq|neq0|normalize|not|notpersist|null|once|or|pi|playsound|playsoundatposition|playsoundloop|pop|poplist|pow|prependstacktolist|prependtolist|print|print2|print3|print4|print5|printall|printallsp|printstack|pushlist|quarterpi|rad2deg|randfloat|randint|rastercolor|refcall|refreshunitloscache|registerformsg|registerscript|registerscriptvar|removeaswareholder|removelistelement|removetableelement|removeunitdamagemap|removewhitespace|repeat|resetcamera|return|reverselist|rotateobj|rotateobjtowards|rotateobjtowardscell|rotatetowards|rotatetowardscell|rotateunit|rotateunittowards|rotateunittowardscell|round|rplcamcopyposandrot|rplcamtween|rplcamtweenlookat|self|sendmsg|sendmversemsg|setadalogopen|setalllegalunitcells|setbeambrightness|setbeamcolor|setbeamend|setbeamforcelocalend|setbeamstart|setbeamvisible|setbeamwidth|setcameraposition|setcamerarotation|setcameratopdown|setcanmoveunits|setcelloccupiedcount|setcmodeditmenuname|setcmodplayermenuname|setcreeper|setcreepercutoff|setcreepergraphavailable|setcreeperinrange|setcrimson|setcustomobjectivetext|setdecalcolor|setdecalposition|setdecalsize|setdecalvisible|setdepartbuttonavailable|seteggorbdata|setfactorywares|setfieldcell|setfieldrect|setflow|setgamemessagetext|setgloballist|setglobaltable|setlegalunitcells|setlistelement|setlistelementrpn|setmappanenabled|setmaprotateenabled|setmapzoomenabled|setmeshhealth|setmissionobjectiveenabled|setmissionobjectiverequired|setmversecreatesunitghost|setmversesendcreeperchanges|setobjactive|setobjcolor|setobjforward|setobjlightconevisible|setobjposition|setobjrotation|setobjscale|setobjtext|setobjtextbillboard|setobjtextcolor|setobjtextfontsize|setorbitalcount|setpause|setprintprefixenabled|setraster|setrasterc|setrastersize|setregisteredscriptvar|setrplcam|setrplcamcursorlocked|setrplcamforward|setrplcamposition|setrplcamright|setrplcamrotation|setrplcamup|setscript1var|setscriptvar|setsoylentcount|setsoylentdelay|setsoylentmode|settableelement|settableelementrpn|setterraformactivecell|setterraformmarker|setterrain|setterraininrange|setterrainline|setterrainoverride|setterrainspecial|setthemeclifflight|setthemeclifflightboost|setthemecliffnormal|setthemecliffnormalamt|setthemecliffnormalscale|setthemecliffscale|setthemeclifftexture|setthemenormal|setthemenormalamt|setthemenormalscale|setthemeoverlayapplytocliffs|setthemeoverlaycolor|setthemeoverlayenabled|setthemeoverlayoffset|setthemeoverlaypixels|setthemeoverlaypointfilter|setthemeoverlayrectpixels|setthemeoverlayscale|setthemetexture|setthemetexturedetile|setthemetexturelight|setthemetexturelightboost|setthemetexturescale|settimer0|settimer1|settimer2|settimer3|settimerobeypause0|settimerobeypause1|settimerobeypause2|settimerobeypause3|settotemactivated|setundercreepereffectenabled|setunitammo|setunitammoware|setunitanticreeperdamages|setunitarmed|setunitbuildlimit|setunitbuildware|setunitcanbuild|setunitcandestroy|setunitcanmove|setunitcanstun|setunitcell|setunitconnectable|setunitcreeperdamages|setunitdamagedbyac|setunitdamagedbycreeper|setunitdebugtext|setunitdestroyunevenland|setunitenabled|setuniternsimulated|setunitfireoffset|setunitfootprintresistscreeperheight|setunitforward|setunitgrowsmesh|setunithealrate|setunithealth|setunitlosenabled|setunitmaxammo|setunitmaxhealth|setunitminimapimage|setunitminimapimagecolor|setunitminimaptext|setunitminimaptimetoevent|setunitmodranges|setunitmovecell|setunitoccupiesland|setunitoutlinecolor|setunitoutlineenabled|setunitoutlinemode|setunitoutlinewidth|setunitpacketrequestrate|setunitpopupenabled|setunitpopuptext0|setunitpopuptext1|setunitposition|setunitrange|setunitrequestpackets|setunitrotation|setunitselectable|setunitselected|setunitsettings|setunitshieldrange|setunitshieldvisible|setunitspecialtarget|setunitspecifiedtarget|setunitspecifiedtargetoccupiesmap|setunitspecifiedtargetpathheight|setunitspecifiedtargetpathsourceoffset|setunitspecifiedtargetshowpath|setunitsselectable|setunitstuncount|setunitsupplied|setunitsuppresscount|setunitsuppressmovement|setunittargetoffset|setunituioptions|setunituistate|setunituitext|setvoidheight|setwallcharged|shortestangle|showadamessage|showadamessageatcell|showadamessageatunit|showgamemessage|showraster|showterrainrangeindicator|showuiindicator|sign|sign0|signalgenerator|sin|sounds|specialtargets|split|sqrmagnitude|sqrt|stacksize|startswith|stopconsole|stopsoundloop|stringlength|stringreplace|stringtolist|stununit|stununitsinrange|sub|substring|suppresstotemactivation|swap|tab|table|tablen|tan|tau|threehalvespi|threequarterpi|tocell|tolower|toupper|trace|trace2|trace3|trace4|trace5|traceall|traceallsp|tracestack|true|twopi|ufc|unattachbeam|uselegalunitcells|v2|v3|v4|vector0|vectorangle|vectoranglecell|while|xor|setmsgbutton)\\b"

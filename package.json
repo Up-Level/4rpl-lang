@@ -2,7 +2,10 @@
   "name": "4rpl-lang",
   "displayName": "4rpl-lang",
   "description": "VSCode syntax highlighting for 4RPL",
-  "version": "0.1.0",
+  "author": {
+    "name": "Up-Level"
+  },
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -10,17 +13,26 @@
     "Programming Languages"
   ],
   "contributes": {
-    "languages": [{
-      "id": "4rpl",
-      "aliases": ["4RPL", "4rpl"],
-      "extensions": [".4rpl"],
-      "configuration": "./language-configuration.json"
-    }],
-    "grammars": [{
-      "language": "4rpl",
-      "scopeName": "source.4rpl",
-      "path": "./syntaxes/4rpl.tmLanguage.json"
-    }]
+    "languages": [
+      {
+        "id": "4rpl",
+        "aliases": [
+          "4RPL",
+          "4rpl"
+        ],
+        "extensions": [
+          "4rpl"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "4rpl",
+        "scopeName": "source.4rpl",
+        "path": "./syntaxes/4rpl.tmLanguage.json"
+      }
+    ]
   },
   "repository": {
     "type": "git",
