@@ -1,16 +1,14 @@
 import * as fs from "fs";
 import axios from "axios";
 import * as nhp from "node-html-parser";
+import { Command } from "./command-finder";
+
+import commandKinds from './data/command-kinds.json';
 
 processCommands();
 
 async function processCommands() {
-    let commands: {
-        "name": String,
-        "url": String,
-        "usage": String,
-        "description": String
-    }[] = [];
+    let commands: Command[] = [];
 
     const file = fs.readFileSync("src/data/commands.html", "utf-8");
     const lines = file.split(/\r\n/)
@@ -21,15 +19,22 @@ async function processCommands() {
         const results = line.match(/<a href="(.+)">(.+)<\/a>/);
 
         if (results == null || results.length < 3) continue; // If none found (should never happen)
-        let command = {
-            "name": results[2],
-            "url": results[1],
-            "usage": "",
-            "description": ""
+        let command: Command = {
+            name: results[2],
+            displayName: "",
+            usage: "",
+            description: "",
+            url: results[1],
+            kind: "Keyword" // Default to keyword
         };
 
         const res = await axios.get(command.url);
         const root = nhp.parse(res.data);
+
+        const displayName = root.querySelector(`#${command.name}`);
+        if (displayName != null) {
+            command.displayName = displayName.innerHTML;
+        }
 
         let usage: nhp.HTMLElement | undefined;
 
@@ -49,11 +54,17 @@ async function processCommands() {
             command.description = descriptionText;
         }
 
+        for (const [key, value] of Object.entries(commandKinds)) {
+            if (value.includes(command.name)) {
+                command.kind = key;
+            }
+        };
+
         commands.push(command);
 
         i += 1;
         if (i % 10 == 0) {
-            console.log(`${i / lines.length * 100}% complete, just completed ${command.name}`);
+            console.log(`${i / lines.length * 100}% complete, just completed ${command.displayName}`);
         }
     }
 

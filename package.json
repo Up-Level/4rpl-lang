@@ -1,9 +1,9 @@
 {
   "name": "4rpl-lang",
   "displayName": "4rpl-lang",
-  "description": "VSCode syntax highlighting for 4RPL",
+  "description": "VSCode Language support for 4RPL.",
   "publisher": "Up-Level",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "engines": {
     "vscode": "^1.76.0"
   },
@@ -15,6 +15,7 @@
     "Programming Languages"
   ],
   "main": "./out/extension.js",
+  "activationEvents": [],
   "contributes": {
     "languages": [
       {

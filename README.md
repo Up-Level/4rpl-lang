@@ -1,14 +1,21 @@
 # 4rpl-lang README
 
-Syntax Highlighting support in VSCode for Creeper World 4's 4RPL language.
+VSCode Language support for Creeper World 4's 4RPL language.
 
 ## Features
 
 - Syntax Highlighting
 - Auto-indentation when creating blocks
+- Hover information for commands from the game's wiki.
+- Autocomplete for built-in commands, local variables and functions.
 - More features are planned
 
 ## Release Notes
+
+### 0.3.0
+
+- Add hover information for built-in commands from the wiki.
+- Add autocomplete for built-in commands, local variables and functions.
 
 ### 0.2.0
 
