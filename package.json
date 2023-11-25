@@ -42,16 +42,36 @@
         "command": "4rpl-lang.read-game-output",
         "title": "4rpl-lang: Read Game Output"
       }
+    ],
+    "configuration": [
+      {
+        "title": "4rpl",
+        "properties": {
+          "4rpl.gameDataFolder": {
+            "type": "string",
+            "default": "${userHome}/Documents/my games/creeperworld4",
+            "description": "Specifies the path to the game's data folder."
+          },
+          "4rpl.rplFileName": {
+            "type": "string",
+            "default": "RPL.txt",
+            "description": "The name of the game's RPL output file."
+          }
+        }
+      }
     ]
   },
   "scripts": {
-    "vscode:prepublish": "",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./"
+    "vscode:prepublish": "npm run esbuild-base -- --minify",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "esbuild": "npm run esbuild-base -- --sourcemap",
+    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "test-compile": "tsc -p ./"
   },
   "devDependencies": {
     "@types/node": "^8.10.25",
     "@types/vscode": "^1.71.0",
+    "esbuild": "^0.18.11",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
   }

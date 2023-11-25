@@ -23,7 +23,7 @@
     ],
     "onEnterRules": [
         {
-            "beforeText": "\\b(if|else|once|do|repeat|case|switch)\\b",
+            "beforeText": "\\b(if|else|once|do|while|repeat|case|switch)\\b",
             "action": { "indent": "indent" }
         }
     ],

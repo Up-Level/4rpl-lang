@@ -1,18 +1,19 @@
 # Change Log
 
-All notable changes to the "4rpl-lang" extension will be documented in this file.
-
 ## 0.5.0
-- Add a command to read the game's "RPL.txt" output file
-- Fixed a bug where variables would not autocomplete if written inside brackets
+- Add a command to read the game's "RPL.txt" output file, and configuration options if this file is not in a standard location.
+- Fixed a bug where variables would not autocomplete if written inside brackets.
+- Use esbuild to compile the extension.
+- Add a colour picker for V4s.
+- Ignore commas in diagnostics checking.
 
 ## 0.4.1
-- Recognise "abs" as a valid command
-- Give the name of an unrecognised command in the error
+- Recognise "abs" as a valid command.
+- Give the name of an unrecognised command in the error.
 
 ## 0.4.0
-- Add basic diagnostic checking
-- Separate features into different files for readability
+- Add basic diagnostic checking.
+- Separate features into different files for readability.
 
 ## 0.3.0
 
