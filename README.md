@@ -10,6 +10,15 @@ VSCode Language support for Creeper World 4's 4RPL language.
 - Autocomplete for built-in commands, local variables and functions.
 - More features are planned
 
+### Wiki on Hover
+![Wiki Hover](./images/wiki-hover.png)
+
+### Variable Autocomplete
+![Variable Autocomplete](./images/variable-autocomplete.png)
+
+### Command Autocomplete
+![Command Autocomplete](./images/command-autocomplete.png)
+
 ## Release Notes
 
 ### 0.3.0
