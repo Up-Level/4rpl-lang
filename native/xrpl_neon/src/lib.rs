@@ -26,7 +26,7 @@ fn validate(mut ctx: FunctionContext) -> JsResult<JsArray> {
 
     for (i, error) in errors.iter().enumerate() {
         let error_js = ctx.empty_object();
-        let message = ctx.string(error.message);
+        let message = ctx.string(&error.message);
         let start = ctx.number(error.start as f64);
         let end = ctx.number(error.end as f64);
 

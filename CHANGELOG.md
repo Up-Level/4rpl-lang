@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.7.0
+- Diagnostics for unbalanced control flow (e.g. an if without an endif)
+- Improved auto indentation/unindentation
+- Corrected spelling of SetUnitSuppressedMovement
+
 ## 0.6.0
 - More nuanced diagnostics checker.
 
