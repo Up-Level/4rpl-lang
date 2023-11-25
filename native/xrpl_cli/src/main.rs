@@ -43,6 +43,9 @@ fn run(cli: Cli) -> Result<usize, Box<dyn Error>> {
 
         for file in files {
             let source_path = &file?.path();
+
+            if source_path.extension().unwrap() != "4rpl" {continue}
+
             let out_path = Path::new(&cli.out_path).join(source_path.file_name().ok_or("_.4rpl")?);
 
             let time_taken = parse_and_write(source_path, &out_path)?;

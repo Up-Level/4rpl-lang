@@ -3,3 +3,4 @@ build
 out
 native/target
 native/test-out/**
+native/test/**

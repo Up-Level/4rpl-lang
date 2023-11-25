@@ -4,6 +4,7 @@ import { HoverProvider } from './hover-provider';
 import { CompletionItemProvider } from './completion-provider';
 import { subscribeDiagnosticChecking } from './diagnostics';
 import { ColorProvider } from './color-provider';
+//import { SignatureHelpProvider } from './signature-help';
 
 export function activate(ctx: vscode.ExtensionContext): void {
     const config = vscode.workspace.getConfiguration("4rpl");
@@ -34,6 +35,10 @@ export function activate(ctx: vscode.ExtensionContext): void {
     ctx.subscriptions.push(
         vscode.languages.registerColorProvider("4rpl", new ColorProvider())
     )
+
+    /*ctx.subscriptions.push(
+        vscode.languages.registerSignatureHelpProvider("4rpl", new SignatureHelpProvider(), '(')
+    );*/
 }
 
 export function deactivate() { }

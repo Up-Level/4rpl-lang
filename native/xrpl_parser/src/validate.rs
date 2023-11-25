@@ -29,7 +29,7 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
     let mut bracket_nesting = 0;
     let mut last_string_pos;
 
-    let mut was_alphabetic;
+    let mut was_token;
     let mut current_word = String::new();
 
     let mut pair_nestings: HashMap<&str, (usize, usize)> = HashMap::new();
@@ -37,15 +37,15 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
         pair_nestings.insert(pair.0, (0, 0));
     }
 
-    loop {
-        was_alphabetic = false;
-
-        match document.next() {
-            Some(char) if char.is_alphabetic() => {
+    while let Some(char) = document.next() {
+        was_token = false;
+        
+        match char {
+            char if is_token(char) => {
                 current_word.push(char);
-                was_alphabetic = true;
+                was_token = true;
             }
-            Some('"') => {
+            '"' => {
                 last_string_pos = pos;
                 if !skip_until('"', &mut document, &mut pos) {
                     errors.push(ValidationError {
@@ -53,14 +53,14 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
                     });
                 }
             }
-            Some('#') => {
+            '#' => {
                 skip_until('\n', &mut document, &mut pos);
             }
-            Some('(') => {
+            '(' => {
                 if bracket_nesting == 0 {root_bracket_pos = pos}
                 bracket_nesting += 1;
             }
-            Some(')') => {
+            ')' => {
                 if bracket_nesting == 0 {
                     errors.push(ValidationError {
                         message: "Unmatched bracket".to_owned(), start: pos, end: pos
@@ -68,44 +68,39 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
                 }
                 else {bracket_nesting -= 1}
             }
-            Some(_) => (),
-            None => {
-                pos += 1;
-
-                check_pairs(current_word.as_str(), pos, &mut pair_nestings, &mut errors);
-
-                if bracket_nesting != 0 {
-                    errors.push(ValidationError {
-                        message: "Unmatched bracket".to_owned(), start: root_bracket_pos, end: pos
-                    });
-                }
-
-                for nesting in pair_nestings {
-                    // Nested tuples :D
-                    if nesting.1.0 != 0 {
-                        let mut end_pair = "";
-                        for pair in PAIRS {
-                            if pair.0 == nesting.0 {
-                                end_pair = pair.1;
-                                break;
-                            }
-                        }
-                        errors.push(ValidationError {
-                            message: format!("\"{}\" does not have a corresponding \"{}\".", nesting.0, end_pair), start: nesting.1.1, end: nesting.1.1 + nesting.0.len()
-                        });
-                    }
-                }
-
-                break;
-            }
+            _ => ()
         }
 
-        if !was_alphabetic {
+        if !was_token {
             check_pairs(current_word.as_str(), pos, &mut pair_nestings, &mut errors);
             current_word.clear();
         }
 
         pos += 1;
+    }
+
+    check_pairs(current_word.as_str(), pos, &mut pair_nestings, &mut errors);
+
+    if bracket_nesting != 0 {
+        errors.push(ValidationError {
+            message: "Unmatched bracket".to_owned(), start: root_bracket_pos, end: pos
+        });
+    }
+
+    for nesting in pair_nestings {
+        // Nested tuples :D
+        if nesting.1.0 != 0 {
+            let mut end_pair = "";
+            for pair in PAIRS {
+                if pair.0 == nesting.0 {
+                    end_pair = pair.1;
+                    break;
+                }
+            }
+            errors.push(ValidationError {
+                message: format!("\"{}\" does not have a corresponding \"{}\".", nesting.0, end_pair), start: nesting.1.1, end: nesting.1.1 + nesting.0.len()
+            });
+        }
     }
 
     /*let elapsed = now.elapsed();
@@ -114,6 +109,10 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
     });*/
 
     errors
+}
+
+fn is_token(c: char) -> bool {
+    c.is_alphanumeric() || c == '-' || c == '_' || c == ':'
 }
 
 fn skip_until(to_find: char, chars: &mut Chars, pos: &mut usize) -> bool {

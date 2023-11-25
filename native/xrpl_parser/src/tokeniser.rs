@@ -24,9 +24,7 @@ static ALIASES: Lazy<HashMap<&str, &str>> = Lazy::new(|| HashMap::from([
 static REPLACE_REGEXES: Lazy<Vec<(Regex, &str)>> = Lazy::new(|| vec![
     (Regex::new(r"#.+").unwrap(),                          ""),
     (Regex::new(r",").unwrap(),                            ""),
-    (Regex::new(r"\[(.*?)\]").unwrap(),                    " $1 GetListElement"),
     (Regex::new(r"->(\*?[\w-]+)[ \n]*\[(.*?)\]").unwrap(), " <-$1 $2 SetListElementRPN"),
-    (Regex::new(r"\{(.*?)\}").unwrap(),                    " $1 GetTableElement"),
     (Regex::new(r"->(\*?[\w-]+)[ \n]*\{(.*?)\}").unwrap(), " <-$1 $2 SetTableElementRPN")
 ]);
 
@@ -59,7 +57,9 @@ pub fn parse(inp_doc: &str) -> Vec<String> {
         document = regex.0.replace_all(&document, regex.1).to_string();
     }
 
-    document = unwarp(&document);
+    document = unwarp(&document, '(', ')', &bracket_unwarper);
+    document = unwarp(&document, '[', ']', &sqr_bracket_unwarper);
+    document = unwarp(&document, '{', '}', &curly_bracket_unwarper);
 
     if pres_required {
         document = unpreserve_string(&document);
@@ -104,7 +104,7 @@ fn unpreserve_string(document: &str) -> String{
     doc_clone
 }
 
-fn unwarp(document: &str) -> String {
+fn unwarp(document: &str, start_delim: char, end_delim: char, unwarper: &dyn Fn(Vec<char>, Vec<char>) -> Vec<char>) -> String {
     let mut current_index = 0;
     let mut current_look_behind;
     let mut current_look_ahead;
@@ -116,7 +116,7 @@ fn unwarp(document: &str) -> String {
     let mut chars: Vec<char> = document.chars().collect();
 
     while current_index < chars.len() {
-        if chars[current_index] == '(' {
+        if chars[current_index] == start_delim {
             if current_index != 0 {
                 current_look_behind = current_index - 1;
                 while current_look_behind > 0 {
@@ -139,8 +139,8 @@ fn unwarp(document: &str) -> String {
             loop {
                 let char = chars[current_look_ahead];
 
-                if      char == '(' { nesting += 1; }
-                else if char == ')' {
+                if      char == start_delim { nesting += 1; }
+                else if char == end_delim {
                     nesting -= 1;
                     if nesting == 0 {
                         end_warp_index = current_look_ahead;
@@ -157,10 +157,10 @@ fn unwarp(document: &str) -> String {
                 }
             }
             
-            let mut unwarped = 
-            Vec::from(&chars[(current_index + 1)..end_warp_index]);
-            unwarped.push(' ');
-            unwarped.extend(&chars[word_index..current_index]);
+            let unwarped = unwarper(
+                Vec::from(&chars[word_index..current_index]),
+                Vec::from(&chars[(current_index + 1)..end_warp_index])
+            );
 
             chars.splice(word_index..(end_warp_index + 1), unwarped);
 
@@ -186,3 +186,33 @@ fn tokenise(document: &str) -> Vec<String> {
         .filter(|t| !t.is_empty())
         .collect()
 }
+
+fn bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
+    let mut unwarped = 
+    Vec::from(enclosed);
+    unwarped.push(' ');
+    unwarped.extend(word);
+
+    unwarped
+}
+
+fn sqr_bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
+    let mut unwarped =
+    Vec::from(word);
+    unwarped.push(' ');
+    unwarped.extend(enclosed);
+    unwarped.extend(" GetListElement".chars().collect::<Vec<char>>());
+
+    unwarped
+}
+
+fn curly_bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
+    let mut unwarped =
+    Vec::from(word);
+    unwarped.push(' ');
+    unwarped.extend(enclosed);
+    unwarped.extend(" GetTableElement".chars().collect::<Vec<char>>());
+
+    unwarped
+}
+

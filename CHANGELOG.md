@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.7.1
+- Nested square / curly brackets should no longer error
+- Flow-control words used in variable names should no longer error
+
 ## 0.7.0
 - Diagnostics for unbalanced control flow (e.g. an if without an endif)
 - Improved auto indentation/unindentation
