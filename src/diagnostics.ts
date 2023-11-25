@@ -3,6 +3,8 @@ import { CommandFinder } from './command-finder';
 import {aliases, classifiers} from "./data/symbols.json";
 
 function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.DiagnosticCollection) {
+    if (document.languageId !== "4rpl") return undefined;
+    
     const workingDiagnostics: vscode.Diagnostic[] = [];
 
     for (let i = 0; i < document.lineCount; i++) {
