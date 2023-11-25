@@ -1,72 +1,71 @@
 import * as vscode from 'vscode';
+import xrpl from "./xrpl.node";
+
 import { CommandFinder } from './command-finder';
-import {aliases, classifiers} from "./data/symbols.json";
+import { aliases, classifiers } from "./data/symbols.json";
 
 function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.DiagnosticCollection) {
     if (document.languageId !== "4rpl") return undefined;
-    
+
+    /*
+    I'm only calling rust code because I was already working on it separately, and I realised
+    I was doing the same thing here. This is a bit of a cobbled together solution and
+    balloons the extension's file size so I won't expand this functionality without going
+    through a language server.
+    */
+    const tokens = xrpl.parse(document.getText());
+    const errors = xrpl.validate(document.getText());
+
     const workingDiagnostics: vscode.Diagnostic[] = [];
 
-    for (let i = 0; i < document.lineCount; i++) {
-        const lineText = document.lineAt(i).text;
-        
-        const invalidTokens = findInvalidCommands(lineText, i);
-        for (const token of invalidTokens) {
+    for (const error of errors) {
+        workingDiagnostics.push( new vscode.Diagnostic(
+            new vscode.Range(document.positionAt(error.start), document.positionAt(error.end)),
+            error.message,
+            vscode.DiagnosticSeverity.Error
+        ));
+    }
+
+    for (let token of tokens) {
+        token = token.replace(/[,\(\)]/ig, "");
+
+        if (token.startsWith('"')) continue;
+
+        let isCommand = true;
+
+        // If token starts with a classifier
+        for (const classifier of classifiers) {
+            if (token.startsWith(classifier)) {
+                isCommand = false;
+                break;
+            }
+        }
+        if (!isCommand) continue;
+
+        // If token is an alias
+        for (const alias of aliases) {
+            if (token == alias) {
+                isCommand = false;
+                break;
+            }
+        }
+        if (!isCommand) continue;
+
+        // If token is a number
+        if (!Number.isNaN(Number(token))) continue;
+
+        // This is probably intended to be a command, so see if it is invalid
+        if (CommandFinder.findCommandByName(token) === undefined) {
+            const currentWordIndex = document.getText().indexOf(token);
             workingDiagnostics.push(new vscode.Diagnostic(
-                token, `Unrecognised command "${document.getText(token)}".`, vscode.DiagnosticSeverity.Error
-            ));
+                new vscode.Range(document.positionAt(currentWordIndex), document.positionAt(currentWordIndex + token.length)),
+                `Unrecognised command "${token}".`,
+                vscode.DiagnosticSeverity.Error
+            ))
         }
     }
 
     diagnostics.set(document.uri, workingDiagnostics);
-}
-
-function findInvalidCommands(line: string, lineIndex: number) {
-    let invalidCommands = [];
-
-    // https://stackoverflow.com/a/18647776
-    const words = line.replace(/[\(\[\{\}\)\] ]/g, " ").replace(/,/g, "").trim().matchAll(/[^\s"]+|"([^"]*)"/gi);
-
-    for (const wordMatch of words) {
-        const word = wordMatch[0];
-
-        // If word is part of a comment then skip this line onwards
-        if (word.includes("#")) break;
-        
-        // If word is a string
-        if (wordMatch[1]) continue;
-
-        let isCommand = true;
-
-        // If word starts with a classifier
-        for (const classifier of classifiers) {
-            if (word.startsWith(classifier)) {
-                isCommand = false;
-                break;
-            }
-        }
-        if (!isCommand) continue;
-
-        // If word is an alias
-        for (const alias of aliases) {
-            if (word == alias) {
-                isCommand = false;
-                break;
-            }
-        }
-        if (!isCommand) continue;
-
-        // If word is a number
-        if (!Number.isNaN(Number(word))) continue;
-
-        // This is probably a command, so see if it is invalid
-        if (CommandFinder.findCommandByName(word) === undefined) {
-            const currentWordIndex = line.indexOf(word);
-            invalidCommands.push(new vscode.Range(lineIndex, currentWordIndex, lineIndex, currentWordIndex + word.length));
-        }
-    }
-
-    return invalidCommands;
 }
 
 // https://github.com/microsoft/vscode-extension-samples/blob/main/code-actions-sample/src/diagnostics.ts

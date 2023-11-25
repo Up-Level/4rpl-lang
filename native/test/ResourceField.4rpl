@@ -1,0 +1,39 @@
+# --ResourceField-- 8/12/2022 8:07:33 PM
+
+# CURRENTLY UNUSED
+# Made this because I thought factory wares synced lol
+
+$deliver_Interval:30
+$consumption_Per_Unit:1
+
+if (GetUnitUpdateCount <-deliver_Interval % eq0)
+	@DeliverResources
+endif
+
+:DeliverResources
+	GetUnits("" GetUnitPosition(self) GetUnitRangeWithMods(self) false false false 2 1 1) ->allUnits
+	GetListCount(<-allUnits) ->allUnitCount
+	
+	GetUnitUIState(self 0) 1 + ->wareType
+	
+	<-allUnitCount 0 do
+		# If correct ammo type and not at max ammo already
+		if (GetUnitAmmoWare(<-allUnits[i]) <-wareType == GetUnitAmmo(<-allUnits[i]) GetUnitMaxAmmo(<-allUnits[i]) < &&)
+			<-allUnits[i]
+		endif
+	loop
+	StackSize ->unitCount
+	List ->units
+
+	# Scale packet requests with amount needed to sustain all units in the field
+	SetUnitPacketRequestRate(self <-consumption <-deliver_Interval /)
+
+	# Return if not enough ammo
+	<-unitCount <-consumption_Per_Unit * ->consumption
+	if (<-consumption GetUnitAmmo(self) >) return endif
+
+	SetUnitAmmo(self GetUnitAmmo(self) <-consumption -)
+	
+	<-unitCount 0 do
+		SetUnitAmmo(<-units[i] GetUnitAmmo(<-units[i]) 1 +)
+	loop

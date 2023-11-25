@@ -3,7 +3,7 @@
   "displayName": "4rpl-lang",
   "description": "VSCode Language support for Creeper World 4's 4RPL.",
   "publisher": "Up-Level",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -63,9 +63,9 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
-    "esbuild": "npm run esbuild-base -- --sourcemap",
-    "esbuild-watch": "npm run esbuild-base -- --sourcemap --watch",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --external:*.node",
+    "compile": "npm run esbuild-base -- --sourcemap",
+    "watch": "npm run esbuild-base -- --sourcemap --watch",
     "test-compile": "tsc -p ./"
   },
   "devDependencies": {

@@ -1,0 +1,75 @@
+# --PlaceableRegions-- 8/13/2022 9:35:41 PM
+
+# How often enemy unit positions are updated in frames (60/s)
+$$unit_Request_Delay:60
+
+:GameLoaded
+	CreateList ->*enemyUnitPositions
+
+	GetMapSize ->sizeZ ->sizeX
+	<-sizeX 2 / ->halfX
+	<-sizeX 4 / ->quarterX
+	
+	V4(1 0 0 0.2) ->red
+	V4(0 1 0 0.2) ->green
+	
+	<-*EXCLUSION_RADIUS 2 * ->diameter
+	<-*EXCLUSION_RADIUS dup * ->rSquared
+
+	# Generate circle image
+	<-*EXCLUSION_RADIUS dup * 4 * 0 do
+		i <-diameter % <-*EXCLUSION_RADIUS - 0.5 + ->x
+		i <-diameter / <-*EXCLUSION_RADIUS - 0.5 + ->z
+		
+		<-x dup * <-z dup * + ->sqrMagnitude
+		if (<-sqrMagnitude <-rSquared >)
+			V4(0 0 0 2) # Don't overwrite pixel
+		else
+			<-red
+		endif
+	loop List ->block
+	
+	CreateThemeOverlay(0 <-sizeX <-sizeZ <-green)
+	SetThemeOverlayScale(0 <-sizeX <-sizeZ)
+	SetThemeOverlayPointFilter(0 true)
+	
+	SetThemeOverlayEnabled(0 false)
+
+	RegisterForMsg("RequestUnitPositions" "SendUnitPositions")
+	RegisterForMsg("ReceiveUnitPositions" dup)
+	
+	RegisterForMsg("MSG_FrameAdvance" "FrameAdvance")
+
+:DrawValidOverlay
+	ClearThemeOverlay(0 <-green)
+	
+	if (GetMversePlayerNum eq0)
+		SetThemeOverlayRectPixels(0 0 0 <-halfX 1 + <-sizeZ <-red)
+	else
+		SetThemeOverlayRectPixels(0 <-halfX 1 - 0 <-halfX 1 + <-sizeZ <-red)
+	endif
+	
+	GetListCount(<-*enemyUnitPositions) 0 do
+		<-*enemyUnitPositions[i] ->pos
+		SetThemeOverlayPixels(0 <-pos.x <-*EXCLUSION_RADIUS - <-pos.z <-*EXCLUSION_RADIUS - <-*EXCLUSION_RADIUS 2 * dup <-block)
+	loop
+
+:SendUnitPositions
+	GetUnitsInRange(<-*middlePosition <-quarterX true false false 0 1 0) ->clientUnits
+	GetListCount(<-clientUnits) 0 do
+		GetUnitPosition(<-clientUnits[i])
+	loop List ->clientPositions
+
+	SendMverseMsg("ReceiveUnitPositions" <-clientPositions)
+
+:ReceiveUnitPositions
+	<-_DATA ->*enemyUnitPositions
+	@DrawValidOverlay
+
+:FrameAdvance
+	if (GetTimer0 eq0)
+		if (GetGameUpdateCount eq0) return endif
+		SetTimer0(<-unit_Request_Delay)
+
+		SendMverseMsg("RequestUnitPositions" "")
+	endif

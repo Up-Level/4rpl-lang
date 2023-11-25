@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.6.0
+- More nuanced diagnostics checker.
+
 ## 0.5.1
 - Ignore all commas in the document.
 

@@ -1,0 +1,7 @@
+[workspace]
+
+members = [
+    "xrpl_cli",
+    "xrpl_neon",
+    "xrpl_parser"
+]

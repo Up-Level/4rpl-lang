@@ -10,6 +10,7 @@
 		"rootDir": "src",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
+		"allowArbitraryExtensions": true
 	},
 	"exclude": ["node_modules", ".vscode-test"]
 }

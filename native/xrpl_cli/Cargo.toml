@@ -1,0 +1,9 @@
+[package]
+name = "xrpl_cli"
+description = "A basic CLI to interface with xrpl_parser. For testing."
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.3.19", features = ["derive"] }
+xrpl_parser = { path = "../xrpl_parser" }

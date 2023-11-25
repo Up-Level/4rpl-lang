@@ -1,0 +1,34 @@
+# --Crystal-- 9/1/2022 6:48:35 PM
+
+$offset:2
+
+GetUnitHealth(self) ->health
+if (<-health <-oldHealth 1 - <)
+	PlaySoundAtPosition("SurviveBaseWarn" 1 GetUnitPosition(self))
+	<-health ->oldHealth
+endif
+
+:Awake
+	GetUnitMaxHealth(self) ->oldHealth
+	
+	if (GetMversePlayerNum 0 lte)
+		SetObjColor(self "Crystal" V3(1 0 0))
+	else
+		SetObjColor(self "Crystal" V3(0 0 1))
+	endif
+
+	RegisterForMsg("MSG_FrameAdvance" "FrameAdvance")
+
+:FrameAdvance
+	SignalGenerator(GetGameFrameCount 0.002 0 false 1) 0.5 * <-offset + ->height
+	SetObjPosition(self "Crystal" V3(0 <-height 0) false)
+	
+	GetObjRotation(self "Crystal" false) ->rot
+	SetObjRotation(self "Crystal" V3(0 <-rot.y 0.2 + 0) false)
+
+:Destroyed
+	if (IsMissionComplete !)
+		SetCustomObjectiveText("<color=red>You Lost")
+		AcquireMissionObjective(5 false)
+		SendMverseMsg("Defeated" null)
+	endif

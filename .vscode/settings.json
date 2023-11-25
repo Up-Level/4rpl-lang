@@ -1,0 +1,7 @@
+{
+    "rust-analyzer.linkedProjects": [
+        "native/xrpl_cli/Cargo.toml",
+        "native/xrpl_neon/Cargo.toml",
+        "native/xrpl_parser/Cargo.toml"
+    ]
+}
