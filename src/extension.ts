@@ -12,7 +12,7 @@ class HoverProvider implements vscode.HoverProvider {
       const command = CommandFinder.findCommandByName(word);
       if (command == undefined) return;
       
-      const hoverText = new vscode.MarkdownString()
+      const hoverText = new vscode.MarkdownString();
       hoverText.supportHtml = true;
 
       hoverText.appendCodeblock(command.usage);
@@ -24,25 +24,30 @@ class HoverProvider implements vscode.HoverProvider {
 }
 
 class CompletionItemProvider implements vscode.CompletionItemProvider {
-  private readonly variableRegex = /(->|<-|-\?|--)(\*?\w*(\.[xyzwrgba0123])?)/ig;
+  private readonly variableActionRegex = /(?<=^|\s)(->|<-|-\?|--|\${1,2})\*?/ig;
+  private readonly variableRegex = /(?<=^|\s)(?:->|<-|-\?|--|\${1,2})\*?([\w-]+)/ig;
   private readonly functionRegex = /(?<=[:@])\w+/ig;
 
   private variableCompletion(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] | undefined {
     let completionItems: vscode.CompletionItem[] | undefined = [];
 
-    let range = document.getWordRangeAtPosition(position, this.variableRegex); // Try to find a variable.
+    // Try to find a variable.
+    let range = document.getWordRangeAtPosition(position, this.variableRegex);
     if (range == undefined) return;
-    
-    const word = document.getText(range).slice(2); // Get variable name, removing the action performed on it (<-, -> etc.).
-    const variables = document.getText().matchAll(this.variableRegex); // Get all variables in the document.
 
+     // Get variable name, removing the action performed on it (<-, -> etc.).
+    const word = document.getText(range).replace(this.variableActionRegex, "");
+
+    // Get all variables in the document.
+    let documentNoComments = document.getText().replace(/#.*/g, "");
+    const variables = documentNoComments.matchAll(this.variableRegex);
     if (variables == null) return;
 
     for (const variable of variables) {
-      const varName = variable[2];
+      const varName = variable[1];
       if (varName == word) continue; // Don't include self
 
-      if (varName.startsWith(word)) {
+      if (varName.toLowerCase().startsWith(word.toLowerCase())) {
         if (completionItems.every(item => item.label != varName)) {
           completionItems.push(new vscode.CompletionItem(varName, vscode.CompletionItemKind.Variable));
         }
@@ -110,7 +115,7 @@ export function activate(ctx: vscode.ExtensionContext): void {
     vscode.languages.registerHoverProvider("4rpl", new HoverProvider()));
   
   ctx.subscriptions.push(
-    vscode.languages.registerCompletionItemProvider("4rpl", new CompletionItemProvider(), '\"'));
+    vscode.languages.registerCompletionItemProvider("4rpl", new CompletionItemProvider()));
 }
 
 export function deactivate() { }

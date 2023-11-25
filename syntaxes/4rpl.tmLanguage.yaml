@@ -62,7 +62,7 @@ repository:
     - name: variable.other.iterator.4rpl
       match: (?<=[\s\A\[\(])(?i)(i|j|k)(?=[\s\z\]\)])
     - name: variable.name.4rpl
-      match: (->|<-|-\?|--)\*?\w*(\.(?i)[xyzwrgba0123])?
+      match: (?<=^|\s)(?:->|<-|-\?|--)\*?([\w-]+)(\.(?i)[xyzwrgba0123])?
 
   support:
     patterns:
