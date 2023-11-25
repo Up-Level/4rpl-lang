@@ -6,6 +6,7 @@
 - Use esbuild to compile the extension.
 - Add a colour picker for V4s.
 - Ignore commas in diagnostics checking.
+- Update command descriptions from wiki.
 
 ## 0.4.1
 - Recognise "abs" as a valid command.
