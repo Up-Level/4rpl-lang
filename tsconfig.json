@@ -10,7 +10,6 @@
 		"rootDir": "src",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
-		"suppressImplicitAnyIndexErrors": true,
 	},
 	"exclude": ["node_modules", ".vscode-test"]
 }

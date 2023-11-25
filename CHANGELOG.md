@@ -2,6 +2,10 @@
 
 All notable changes to the "4rpl-lang" extension will be documented in this file.
 
+## 0.4.0
+- Add basic diagnostic checking
+- Separate features into different files for readability
+
 ## 0.3.0
 
 - Add hover information for built-in commands from the wiki.

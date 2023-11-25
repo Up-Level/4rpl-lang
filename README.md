@@ -1,4 +1,4 @@
-# 4rpl-lang README
+# 4rpl-lang
 
 VSCode Language support for Creeper World 4's 4RPL language.
 
@@ -8,6 +8,7 @@ VSCode Language support for Creeper World 4's 4RPL language.
 - Auto-indentation when creating blocks
 - Hover information for commands from the game's wiki.
 - Autocomplete for built-in commands, local variables and functions.
+- Basic error checking for invalid commands
 - More features are planned
 
 ### Wiki on Hover
@@ -20,6 +21,10 @@ VSCode Language support for Creeper World 4's 4RPL language.
 ![Command Autocomplete](./images/command-autocomplete.png)
 
 ## Release Notes
+
+### 0.4.0
+- Add basic diagnostic checking
+- Separate features into different files for readability
 
 ### 0.3.0
 
