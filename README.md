@@ -22,6 +22,14 @@ VSCode Language support for Creeper World 4's 4RPL language.
 
 ## Release Notes
 
+### 0.5.0
+- Add a command to read the game's "RPL.txt" output file
+- Fixed a bug where variables would not autocomplete if written inside brackets
+
+### 0.4.1
+- Recognise "abs" as a valid command
+- Give the name of an unrecognised command in the error
+
 ### 0.4.0
 - Add basic diagnostic checking
 - Separate features into different files for readability

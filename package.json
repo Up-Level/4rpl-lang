@@ -1,9 +1,9 @@
 {
   "name": "4rpl-lang",
   "displayName": "4rpl-lang",
-  "description": "VSCode Language support for 4RPL.",
+  "description": "VSCode Language support for Creeper World 4's 4RPL.",
   "publisher": "Up-Level",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -35,6 +35,12 @@
         "language": "4rpl",
         "scopeName": "source.4rpl",
         "path": "./syntaxes/4rpl.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "4rpl-lang.read-game-output",
+        "title": "4rpl-lang: Read Game Output"
       }
     ]
   },

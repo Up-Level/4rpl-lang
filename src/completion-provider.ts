@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 import { CommandFinder } from './command-finder';
 
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
-    private readonly variableActionRegex = /(?<=^|\s)(->|<-|-\?|--|\${1,2})\*?/ig;
-    private readonly variableRegex = /(?<=^|\s)(?:->|<-|-\?|--|\${1,2})\*?([\w-]+)/ig;
+    private readonly variableActionRegex = /(?<=^|\s|[\(\[\{])(->|<-|-\?|--|\${1,2})\*?/ig;
+    private readonly variableRegex = /(?<=^|\s|[\(\[\{])(?:->|<-|-\?|--|\${1,2})\*?([\w-]+)/ig;
     private readonly functionRegex = /(?<=[:@])\w+/ig;
 
     private variableCompletion(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] | undefined {
