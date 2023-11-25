@@ -2,6 +2,11 @@
 
 All notable changes to the "4rpl-lang" extension will be documented in this file.
 
+## 0.3.0
+
+- Add hover information for built-in commands from the wiki.
+- Add autocomplete for built-in commands, local variables and functions.
+
 ## 0.2.0
 
 - Language grammar is now written in YAML and converted to JSON.
