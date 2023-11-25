@@ -6,7 +6,7 @@
         {
             "label": "yaml-to-json",
             "type": "shell",
-            "command": "npx js-yaml syntaxes/4rpl.tmLanguage.yaml > syntaxes/4rpl.tmLanguage.json",
+            "command": "npx js-yaml syntaxes/4rpl.tmLanguage.yaml | out-file -encoding ASCII syntaxes/4rpl.tmLanguage.json",
             "problemMatcher": []
         }
     ]

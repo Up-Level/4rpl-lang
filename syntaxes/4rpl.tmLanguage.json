@@ -85,7 +85,7 @@
       "patterns": [
         {
           "name": "variable.other.initvar.4rpl",
-          "match": "^\\${1,2}\\w+:"
+          "match": "\\${1,2}\\w+:"
         },
         {
           "name": "variable.other.iterator.4rpl",
