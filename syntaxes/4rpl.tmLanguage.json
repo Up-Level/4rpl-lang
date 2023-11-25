@@ -50,11 +50,11 @@
       "patterns": [
         {
           "name": "entity.name.function.define.4rpl",
-          "match": ":\\w+"
+          "match": ":\\w*"
         },
         {
           "name": "entity.name.function.call.4rpl",
-          "match": "@\\w+"
+          "match": "@\\w*"
         }
       ]
     },

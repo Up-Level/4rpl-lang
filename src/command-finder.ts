@@ -1,5 +1,4 @@
 import commands from './data/commands.json'
-import { CompletionItemKind } from 'vscode';
 
 export type Command = {
     name: string,
