@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.5.1
+- Ignore all commas in the document.
+
 ## 0.5.0
 - Add a command to read the game's "RPL.txt" output file, and configuration options if this file is not in a standard location.
 - Fixed a bug where variables would not autocomplete if written inside brackets.

@@ -25,7 +25,7 @@ function findInvalidCommands(line: string, lineIndex: number) {
     let invalidCommands = [];
 
     // https://stackoverflow.com/a/18647776
-    const words = line.replace(/[\(\[\{\}\)\] ]/g, " ").replace(",", "").trim().matchAll(/[^\s"]+|"([^"]*)"/gi);
+    const words = line.replace(/[\(\[\{\}\)\] ]/g, " ").replace(/,/g, "").trim().matchAll(/[^\s"]+|"([^"]*)"/gi);
 
     for (const wordMatch of words) {
         const word = wordMatch[0];
