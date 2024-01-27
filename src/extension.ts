@@ -4,20 +4,18 @@ import { HoverProvider } from './hover-provider';
 import { CompletionItemProvider } from './completion-provider';
 import { subscribeDiagnosticChecking } from './diagnostics';
 import { ColorProvider } from './color-provider';
-//import { SignatureHelpProvider } from './signature-help';
+import { DefinitionProvider } from './definition-provider';
 
 export function activate(ctx: vscode.ExtensionContext): void {
     const config = vscode.workspace.getConfiguration("4rpl");
 
     ctx.subscriptions.push(
-        vscode.languages.registerHoverProvider("4rpl", new HoverProvider()));
+        vscode.languages.registerHoverProvider(         "4rpl", new HoverProvider()),
+        vscode.languages.registerCompletionItemProvider("4rpl", new CompletionItemProvider()),
+        vscode.languages.registerColorProvider(         "4rpl", new ColorProvider()),
+        vscode.languages.registerDefinitionProvider(    "4rpl", new DefinitionProvider())
+    );
 
-    ctx.subscriptions.push(
-        vscode.languages.registerCompletionItemProvider("4rpl", new CompletionItemProvider()));
-
-    const diagnostics = vscode.languages.createDiagnosticCollection("diagnostics");
-    ctx.subscriptions.push(diagnostics);
-    
     const readOutputTask = new vscode.Task(
         {type: "4rpl", task:"readGameOutput"},
         vscode.TaskScope.Workspace,
@@ -28,17 +26,11 @@ export function activate(ctx: vscode.ExtensionContext): void {
     );
     ctx.subscriptions.push(
         vscode.commands.registerCommand("4rpl-lang.read-game-output", () => vscode.tasks.executeTask(readOutputTask))
-    )
+    );
 
+    const diagnostics = vscode.languages.createDiagnosticCollection("diagnostics");
+    ctx.subscriptions.push(diagnostics);
     subscribeDiagnosticChecking(ctx, diagnostics);
-
-    ctx.subscriptions.push(
-        vscode.languages.registerColorProvider("4rpl", new ColorProvider())
-    )
-
-    /*ctx.subscriptions.push(
-        vscode.languages.registerSignatureHelpProvider("4rpl", new SignatureHelpProvider(), '(')
-    );*/
 }
 
 export function deactivate() { }

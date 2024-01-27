@@ -10,8 +10,14 @@ fn parse(mut ctx: FunctionContext) -> JsResult<JsArray> {
     let out = JsArray::new(&mut ctx, tokens.len() as u32);
 
     for (i, token) in tokens.iter().enumerate() {
-        let t = ctx.string(token);
-        out.set(&mut ctx, i as u32, t)?;
+        let token_js = ctx.empty_object();
+        let value = ctx.string(&token.value);
+        let position = ctx.number(token.position as f64);
+
+        token_js.set(&mut ctx, "value", value)?;
+        token_js.set(&mut ctx, "position", position)?;
+
+        out.set(&mut ctx, i as u32, token_js)?;
     };
 
     Ok(out)

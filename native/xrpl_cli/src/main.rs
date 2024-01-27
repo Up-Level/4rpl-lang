@@ -84,8 +84,10 @@ fn parse_and_write(source_path: &PathBuf, out_path: &PathBuf) -> Result<Duration
     }*/
 
     let elapsed = now.elapsed();
-    
-    fs::write(out_path, tokens.join(" "))?;
+    println!("{:?}", tokens);
+    fs::write(out_path, tokens.iter()
+        .fold("".to_string(), |acc, t| acc + " " + &t.value)
+    )?;
 
     Ok(elapsed)
 }

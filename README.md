@@ -8,9 +8,10 @@ VSCode Language support for Creeper World 4's 4RPL language.
 - Auto-indentation when creating blocks.
 - Hover information for commands from the game's wiki.
 - Autocomplete for built-in commands, local variables and functions.
-- Error diagnostics for some simpler cases.
+- Rudimentary Error diagnostics.
 - Colour picker for Vector 4 values.
 - A command to read the game's RPL.txt output file.
+- Go to definition for local functions.
 
 ### Syntax Highlighting
 ![Syntax Highlighting](./images/syntax-highlighting.png)

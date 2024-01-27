@@ -1,13 +1,21 @@
 # Change Log
 
+## 0.8.0
+- Added warning for use of unassigned variables.
+- Added config option to disable said warning (can be inaccurate when SetScriptVar is used.)
+- Added a go to definition provider for local functions.
+- Fixed issues with error diagnostics being positioned incorrectly.
+- Added several commands to the highlighter that should have been there in the first place.
+- Changed commands "DQ" and "LF" to constants in the highlighter.
+
 ## 0.7.1
-- Nested square / curly brackets should no longer error
-- Flow-control words used in variable names should no longer error
+- Nested square / curly brackets should no longer error.
+- Flow-control words used in variable names should no longer error.
 
 ## 0.7.0
-- Diagnostics for unbalanced control flow (e.g. an if without an endif)
-- Improved auto indentation/unindentation
-- Corrected spelling of SetUnitSuppressedMovement
+- Diagnostics for unbalanced control flow (e.g. an if without an endif).
+- Improved auto indentation/unindentation.
+- Corrected spelling of SetUnitSuppressedMovement.
 
 ## 0.6.0
 - More nuanced diagnostics checker.

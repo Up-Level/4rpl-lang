@@ -1,9 +1,15 @@
-use std::collections::HashMap;
+//use std::collections::HashMap;
 
-use regex::Regex;
+use regex::{Captures, Regex};
 use once_cell::sync::Lazy;
 
-static ALIASES: Lazy<HashMap<&str, &str>> = Lazy::new(|| HashMap::from([
+#[derive(Debug)]
+pub struct Token {
+    pub value: String,
+    pub position: usize
+}
+
+/*static ALIASES: Lazy<HashMap<&str, &str>> = Lazy::new(|| HashMap::from([
     ("+",  "add"),
     ("&&", "and"),
     ("/",  "div"),
@@ -19,7 +25,7 @@ static ALIASES: Lazy<HashMap<&str, &str>> = Lazy::new(|| HashMap::from([
     ("||", "or"),
     ("^",  "pow"),
     ("-",  "sub")
-]));
+]));*/
 
 static REPLACE_REGEXES: Lazy<Vec<(Regex, &str)>> = Lazy::new(|| vec![
     (Regex::new(r"#.+").unwrap(),                          ""),
@@ -32,10 +38,14 @@ static PRESERVE_IN_STRING: [char; 4] = ['(',')','#',','];
 static PRESERVE_REG: Lazy<Regex> = Lazy::new(|| Regex::new(r"[\(\)#,]").unwrap());
 
 static STRING_REG: Lazy<Regex> = Lazy::new(|| Regex::new("\".*?\"").unwrap());
-static TOKEN_REG:  Lazy<Regex> = Lazy::new(|| Regex::new("\"[^\"]*\"|[^\\s\"]+").unwrap());
+static TOKEN_REG:  Lazy<Regex> = Lazy::new(|| Regex::new("\"[^\"]*\"|[^\\s\"\\[\\](){}]+").unwrap());
+
+static TOKEN_SEPARATORS: [char; 8] = [
+    ':', '(', ')', '[', ']', '{', '}', '"'
+];
 
 /// Tokenise the given input.
-pub fn parse(inp_doc: &str) -> Vec<String> {
+pub fn parse(inp_doc: &str) -> Vec<Token> {
     let mut document = inp_doc.to_owned();
 
     /*document = document.split('"').enumerate().map(|(i, item)| {
@@ -65,7 +75,13 @@ pub fn parse(inp_doc: &str) -> Vec<String> {
         document = unpreserve_string(&document);
     }
 
-    tokenise(&document)
+    let token_strings = tokenise(&document);
+
+    let uncommented = REPLACE_REGEXES[0].0.replace_all(&inp_doc, |caps: &Captures| {
+        " ".repeat(caps[0].len())
+    }).to_string();
+
+    recover_positions(&uncommented, token_strings)
 }
 
 fn preserve_string(document: &str) -> (String, bool) {
@@ -176,15 +192,48 @@ fn unwarp(document: &str, start_delim: char, end_delim: char, unwarper: &dyn Fn(
 fn tokenise(document: &str) -> Vec<String> {
     TOKEN_REG.find_iter(document)
         .map(|t| {
-            let token = t.as_str();
-
-            return match ALIASES.get(token) {
-                Some(alias) => alias.to_string(),
-                None => token.trim().replace('\t', "")
-            };
+            t.as_str().trim().replace('\t', "")
         })
         .filter(|t| !t.is_empty())
         .collect()
+}
+
+fn recover_positions(document: &str, token_strings: Vec<String>) -> Vec<Token> {
+    let mut unique_token_strings: Vec<String> = Vec::new();
+    for token in token_strings {
+        if !unique_token_strings.contains(&token) {
+            unique_token_strings.push(token);
+        }
+    }
+
+    let mut tokens: Vec<Token> = Vec::new();
+    for token_string in unique_token_strings.iter() {
+        document.match_indices(token_string).for_each(|(i, _)| {
+            match document.get(i - 1 .. i + token_string.len() + 1) {
+                Some(boundaries) => {
+                    if is_token_separator( boundaries.chars().next() ) &&
+                       is_token_separator( boundaries.chars().last() ) {
+                        tokens.push(Token {
+                            value: token_string.to_string(),
+                            position: i
+                        })
+                    }
+                },
+                None => ()
+            };
+        });
+    }
+
+    tokens.sort_unstable_by_key(|t| t.position);
+
+    tokens
+}
+
+fn is_token_separator(character: Option<char>) -> bool {
+    match character {
+        Some(c) => return c.is_whitespace() || TOKEN_SEPARATORS.contains(&c),
+        None    => return true
+    }
 }
 
 fn bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
@@ -215,4 +264,3 @@ fn curly_bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
 
     unwarped
 }
-

@@ -4,7 +4,9 @@ build/**
 images/**
 node_modules/**
 .gitignore
+**/*.yaml
 **/*.map
 **/*.ts
 **/tsconfig.json
 native/**
+src/**

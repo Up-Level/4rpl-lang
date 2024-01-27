@@ -19,9 +19,15 @@
 
 
 
+
+
+
 0 ->var
 GetUnitPosition(<-var)
 AFakeCommand(<-var)
+
+# This warning can be disabled in the extension config
+<-unassignedVariable
 
 if
 endif 

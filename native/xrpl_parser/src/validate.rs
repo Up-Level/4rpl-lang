@@ -149,7 +149,7 @@ fn check_pairs(word: &str, pos: usize, pair_nestings: &mut HashMap<&str, (usize,
 
             if nesting.0 == 0 {
                 errors.push(ValidationError {
-                    message: format!("\"{}\" does not have a corresponding \"{}\"", pair.1, pair.0), start: pos - word.len(), end: pos
+                    message: format!("\"{}\" does not have a corresponding \"{}\".", pair.1, pair.0), start: pos - word.len(), end: pos
                 });
             }
 

@@ -3,7 +3,7 @@
   "displayName": "4rpl-lang",
   "description": "VSCode Language support for Creeper World 4's 4RPL.",
   "publisher": "Up-Level",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -56,6 +56,11 @@
             "type": "string",
             "default": "RPL.txt",
             "description": "The name of the game's RPL output file."
+          },
+          "4rpl.unassignedVarWarning": {
+            "type": "boolean",
+            "default": true,
+            "description": "Toggle the unassigned variable warning."
           }
         }
       }

@@ -3,9 +3,12 @@ import xrpl from "./xrpl.node";
 
 import { CommandFinder } from './command-finder';
 import { aliases, classifiers } from "./data/symbols.json";
+import { Tokeniser } from './tokeniser';
 
 function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.DiagnosticCollection) {
     if (document.languageId !== "4rpl") return undefined;
+    
+    let unassignedWarning = vscode.workspace.getConfiguration("4rpl").get("unassignedVarWarning");
 
     /*
     I'm only calling rust code because I was already working on it separately, and I realised
@@ -13,7 +16,10 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
     balloons the extension's file size so I won't expand this functionality without going
     through a language server.
     */
-    const tokens = xrpl.parse(document.getText());
+    Tokeniser.update(document.getText());
+    const tokens = Tokeniser.tokens;
+    const variables = Tokeniser.variables;
+
     const errors = xrpl.validate(document.getText());
 
     const workingDiagnostics: vscode.Diagnostic[] = [];
@@ -27,15 +33,31 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
     }
 
     for (let token of tokens) {
-        token = token.replace(/[,\(\)]/ig, "");
+        //token = token.replace(/[,\(\)]/ig, "");
 
-        if (token.startsWith('"')) continue;
+        if (token.value.startsWith('"')) continue;
 
         let isCommand = true;
 
         // If token starts with a classifier
         for (const classifier of classifiers) {
-            if (token.startsWith(classifier)) {
+            if (token.value.startsWith(classifier)) {
+                if (unassignedWarning) {
+                    const variable = token.value.replace(classifier, "").split(".");
+
+                    if (   classifier == "<-"
+                        && !variable[0].startsWith("*")
+                        && (variable[1] == undefined || variable[1] == "" || !variable[1].match(/[xyzwrgba0123]/))
+                        && !variables.includes(variable[0])) {
+
+                        workingDiagnostics.push(new vscode.Diagnostic(
+                            new vscode.Range(document.positionAt(token.position), document.positionAt(token.position + token.value.length)),
+                            `Use of unassigned variable "${variable[0]}".`,
+                            vscode.DiagnosticSeverity.Warning
+                        ));
+                    }
+                }
+
                 isCommand = false;
                 break;
             }
@@ -44,7 +66,7 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
 
         // If token is an alias
         for (const alias of aliases) {
-            if (token == alias) {
+            if (token.value == alias) {
                 isCommand = false;
                 break;
             }
@@ -52,14 +74,13 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
         if (!isCommand) continue;
 
         // If token is a number
-        if (!Number.isNaN(Number(token))) continue;
+        if (!Number.isNaN(Number(token.value))) continue;
 
         // This is probably intended to be a command, so see if it is invalid
-        if (CommandFinder.findCommandByName(token) === undefined) {
-            const currentWordIndex = document.getText().indexOf(token);
+        if (CommandFinder.findCommandByName(token.value) === undefined) {
             workingDiagnostics.push(new vscode.Diagnostic(
-                new vscode.Range(document.positionAt(currentWordIndex), document.positionAt(currentWordIndex + token.length)),
-                `Unrecognised command "${token}".`,
+                new vscode.Range(document.positionAt(token.position), document.positionAt(token.position + token.value.length)),
+                `Unrecognised command "${token.value}".`,
                 vscode.DiagnosticSeverity.Error
             ))
         }
@@ -77,12 +98,8 @@ export function subscribeDiagnosticChecking(ctx: vscode.ExtensionContext, diagno
     ctx.subscriptions.push(
         vscode.window.onDidChangeActiveTextEditor(e => {
             if (e) refreshDiagnostics(e.document, diagnostics);
-        })
+        }),
+        vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, diagnostics)),
+        vscode.workspace.onDidCloseTextDocument(e => diagnostics.delete(e.uri))
     );
-
-    ctx.subscriptions.push(
-        vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, diagnostics)));
-
-    ctx.subscriptions.push(
-        vscode.workspace.onDidCloseTextDocument(e => diagnostics.delete(e.uri)));
 }

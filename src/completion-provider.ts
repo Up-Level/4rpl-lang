@@ -42,7 +42,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         if (range == undefined) return;
 
         const word = document.getText(range).slice(1); // Get function name, removing the @ or :.
-        const functions = document.getText().matchAll(this.functionRegex); // Get all variables in the document.
+        const functions = document.getText().matchAll(this.functionRegex); // Get all functions in the document.
 
         for (const func of functions) {
             const funcStr = func.toString();
