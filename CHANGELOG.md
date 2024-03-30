@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.8.1
+- Added new commands that weren't included previously.
+- Fixed bug that caused errors for invalid commands inside strings/comments.
+- Made variables, flow control and functions case-insensitive.
+- Fixed refread and refwrite not being recognised as commands.
+- Fixed tokenised values not being reset every time they get updated.
+- Removed string escaping (4rpl doesn't have this).
+- Fixed highlighting of keywords in certain situations.
+
 ## 0.8.0
 - Added warning for use of unassigned variables.
 - Added config option to disable said warning (can be inaccurate when SetScriptVar is used.)

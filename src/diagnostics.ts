@@ -19,17 +19,21 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
     Tokeniser.update(document.getText());
     const tokens = Tokeniser.tokens;
     const variables = Tokeniser.variables;
+    const lowerCaseVariables = variables.map(v => v.toLowerCase());
 
     const errors = xrpl.validate(document.getText());
 
     const workingDiagnostics: vscode.Diagnostic[] = [];
 
     for (const error of errors) {
-        workingDiagnostics.push( new vscode.Diagnostic(
+        const diagnostic = new vscode.Diagnostic(
             new vscode.Range(document.positionAt(error.start), document.positionAt(error.end)),
             error.message,
             vscode.DiagnosticSeverity.Error
-        ));
+        );
+        diagnostic.source = "4rpl-lang";
+
+        workingDiagnostics.push(diagnostic);
     }
 
     for (let token of tokens) {
@@ -44,17 +48,21 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
             if (token.value.startsWith(classifier)) {
                 if (unassignedWarning) {
                     const variable = token.value.replace(classifier, "").split(".");
+                    if (variable[0] === "!") continue;
 
                     if (   classifier == "<-"
                         && !variable[0].startsWith("*")
                         && (variable[1] == undefined || variable[1] == "" || !variable[1].match(/[xyzwrgba0123]/))
-                        && !variables.includes(variable[0])) {
+                        && !lowerCaseVariables.includes(variable[0].toLowerCase())) {
 
-                        workingDiagnostics.push(new vscode.Diagnostic(
+                        const diagnostic = new vscode.Diagnostic(
                             new vscode.Range(document.positionAt(token.position), document.positionAt(token.position + token.value.length)),
-                            `Use of unassigned variable "${variable[0]}".`,
+                            `Use of unassigned variable "${variable[0]}".\nThis warning can be disabled in the extension config by unchecking "4rpl.unassignedVarWarning".`,
                             vscode.DiagnosticSeverity.Warning
-                        ));
+                        )
+                        diagnostic.source = "4rpl-lang"
+
+                        workingDiagnostics.push(diagnostic);
                     }
                 }
 

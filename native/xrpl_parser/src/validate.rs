@@ -42,7 +42,7 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
         
         match char {
             char if is_token(char) => {
-                current_word.push(char);
+                current_word.push(char.to_ascii_lowercase());
                 was_token = true;
             }
             '"' => {

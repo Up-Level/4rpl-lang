@@ -40,8 +40,8 @@ static PRESERVE_REG: Lazy<Regex> = Lazy::new(|| Regex::new(r"[\(\)#,]").unwrap()
 static STRING_REG: Lazy<Regex> = Lazy::new(|| Regex::new("\".*?\"").unwrap());
 static TOKEN_REG:  Lazy<Regex> = Lazy::new(|| Regex::new("\"[^\"]*\"|[^\\s\"\\[\\](){}]+").unwrap());
 
-static TOKEN_SEPARATORS: [char; 8] = [
-    ':', '(', ')', '[', ']', '{', '}', '"'
+static TOKEN_SEPARATORS: [char; 6] = [
+    '(', ')', '[', ']', '{', '}'
 ];
 
 /// Tokenise the given input.

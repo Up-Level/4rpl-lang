@@ -1,4 +1,5 @@
 import commands from './data/commands.json'
+import specialCommands from './data/special-commands.json'
 
 export type Command = {
     name: string,
@@ -10,7 +11,12 @@ export type Command = {
 };
 
 export class CommandFinder {
-    public static readonly commands = commands;
+    // Joins specialCommands onto the end of commands
+    public static readonly commands = (() => {
+        const cmds = commands;
+        cmds.push(...specialCommands);
+        return cmds
+    })();
     private static readonly commandNames = commands.map(command => command.displayName);
 
     public static findCommandByName(givenName: String): Command | undefined {

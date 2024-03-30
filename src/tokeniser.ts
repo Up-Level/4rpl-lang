@@ -20,8 +20,11 @@ export class Tokeniser {
     public static update(document: string) {
         this._tokens = xrpl.parse(document);
 
+        this._variables = []
+        this._functions = []
+
         for (let token of this._tokens) {
-            if (token.value.startsWith("->")) {
+            if (token.value.startsWith("->") && token.value !== "->!") {
                 this._variables.push(token.value.replace("->", ""));
             }
             else if (token.value.startsWith("$") || token.value.startsWith("$$")) {

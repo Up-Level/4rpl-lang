@@ -10,7 +10,7 @@ export class DefinitionProvider implements vscode.DefinitionProvider {
 
         const word = document.getText(range);
 
-        const func = Tokeniser.functions.find(token => token.value == word);
+        const func = Tokeniser.functions.find(token => token.value.toLowerCase() == word.toLowerCase());
         if (func) {
             return new vscode.Location(document.uri, document.positionAt(func.position));
         }
