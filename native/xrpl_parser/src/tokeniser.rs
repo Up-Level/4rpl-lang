@@ -62,6 +62,7 @@ pub fn parse(inp_doc: &str) -> Vec<Token> {
 
     let pres_required;
     (document, pres_required) = preserve_string(&document);
+    let preserved_doc = document.clone();
 
     for regex in REPLACE_REGEXES.iter() {
         document = regex.0.replace_all(&document, regex.1).to_string();
@@ -77,9 +78,10 @@ pub fn parse(inp_doc: &str) -> Vec<Token> {
 
     let token_strings = tokenise(&document);
 
-    let uncommented = REPLACE_REGEXES[0].0.replace_all(&inp_doc, |caps: &Captures| {
+    let mut uncommented = REPLACE_REGEXES[0].0.replace_all(&preserved_doc, |caps: &Captures| {
         " ".repeat(caps[0].len())
     }).to_string();
+    uncommented = unpreserve_string(&uncommented);
 
     recover_positions(&uncommented, token_strings)
 }
@@ -209,18 +211,42 @@ fn recover_positions(document: &str, token_strings: Vec<String>) -> Vec<Token> {
     let mut tokens: Vec<Token> = Vec::new();
     for token_string in unique_token_strings.iter() {
         document.match_indices(token_string).for_each(|(i, _)| {
-            match document.get(i - 1 .. i + token_string.len() + 1) {
-                Some(boundaries) => {
-                    if is_token_separator( boundaries.chars().next() ) &&
-                       is_token_separator( boundaries.chars().last() ) {
-                        tokens.push(Token {
-                            value: token_string.to_string(),
-                            position: i
-                        })
+            let mut is_token_separated = false;
+
+            // If this token is at the start of the file, then the first boundary char is a separator
+            if i == 0 {
+                match document.get(i .. i + token_string.len() + 1) {
+                    Some(boundaries) => {
+                        if is_token_separator( boundaries.chars().last() ) {
+                            is_token_separated = true;
+                        }
                     }
-                },
-                None => ()
-            };
+                    None => is_token_separated = true
+                }
+            }
+            else {
+                match document.get(i - 1 .. i + token_string.len() + 1) {
+                    Some(boundaries) => {
+                        if is_token_separator( boundaries.chars().next() ) &&
+                           is_token_separator( boundaries.chars().last() ) {
+                            is_token_separated = true;
+                        }
+                    },
+                    None => {
+                        // Unwrap is ok here because i - 1 is definitely valid at this point
+                        if is_token_separator( document.get(i - 1 .. i - 1).unwrap().chars().next() ) {
+                            is_token_separated = true;
+                        }
+                    }
+                }
+            }
+
+            if is_token_separated {
+                tokens.push(Token {
+                    value: token_string.to_string(),
+                    position: i
+                });
+            }
         });
     }
 
@@ -231,14 +257,14 @@ fn recover_positions(document: &str, token_strings: Vec<String>) -> Vec<Token> {
 
 fn is_token_separator(character: Option<char>) -> bool {
     match character {
-        Some(c) => return c.is_whitespace() || TOKEN_SEPARATORS.contains(&c),
-        None    => return true
+        Some(c) => c.is_whitespace() || TOKEN_SEPARATORS.contains(&c),
+        None    => true
     }
 }
 
 fn bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
     let mut unwarped = 
-    Vec::from(enclosed);
+    enclosed;
     unwarped.push(' ');
     unwarped.extend(word);
 
@@ -247,7 +273,7 @@ fn bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
 
 fn sqr_bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
     let mut unwarped =
-    Vec::from(word);
+    word;
     unwarped.push(' ');
     unwarped.extend(enclosed);
     unwarped.extend(" GetListElement".chars().collect::<Vec<char>>());
@@ -257,7 +283,7 @@ fn sqr_bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
 
 fn curly_bracket_unwarper(word: Vec<char>, enclosed: Vec<char>) -> Vec<char> {
     let mut unwarped =
-    Vec::from(word);
+    word;
     unwarped.push(' ');
     unwarped.extend(enclosed);
     unwarped.extend(" GetTableElement".chars().collect::<Vec<char>>());

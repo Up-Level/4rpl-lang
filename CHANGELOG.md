@@ -1,5 +1,9 @@
 # Change Log
 
+## 0.8.3
+- Fixed bug that treated a # in a string as a comment.
+- Fixed bug that broke the tokeniser when a token was at the beginning or end of a file.
+
 ## 0.8.2
 - Fixed bug that caused _DATA to not be recognised as a variable.
 
