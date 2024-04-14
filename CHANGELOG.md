@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.8.2
+- Fixed bug that caused _DATA to not be recognised as a variable.
+
 ## 0.8.1
 - Added new commands that weren't included previously.
 - Fixed bug that caused errors for invalid commands inside strings/comments.
