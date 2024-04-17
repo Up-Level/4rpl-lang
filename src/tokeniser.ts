@@ -1,5 +1,6 @@
 import xrpl from "./xrpl.node";
 
+// This uses get methods since tokens should be read-only outside this class.
 export class Tokeniser {
     private static _tokens: xrpl.token[] = [];
     private static _variables: string[] = ["_DATA"];
@@ -28,7 +29,7 @@ export class Tokeniser {
                 this._variables.push(token.value.replace("->", ""));
             }
             else if (token.value.startsWith("$") || token.value.startsWith("$$")) {
-                this._variables.push(token.value.split(":")[0].replace(/\${1,2}/g, ""));
+                this._variables.push(token.value.replace(/\${1,2}/g, ""));
             }
             else if (token.value.startsWith(":")) {
                 this._functions.push({

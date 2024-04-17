@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.8.4
+- Refactor of tokeniser to hopefully stop weird errors.
+
 ## 0.8.3
 - Fixed bug that treated a # in a string as a comment.
 - Fixed bug that broke the tokeniser when a token was at the beginning or end of a file.

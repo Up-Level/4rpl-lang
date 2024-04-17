@@ -11,11 +11,12 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
     let unassignedWarning = vscode.workspace.getConfiguration("4rpl").get("unassignedVarWarning");
 
     /*
-    I'm only calling rust code because I was already working on it separately, and I realised
+    I'm only using rust code because I was already working on it separately, and I realised
     I was doing the same thing here. This is a bit of a cobbled together solution and
     balloons the extension's file size so I won't expand this functionality without going
     through a language server.
     */
+    
     Tokeniser.update(document.getText());
     const tokens = Tokeniser.tokens;
     const variables = Tokeniser.variables;
@@ -46,14 +47,15 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
         // If token starts with a classifier
         for (const classifier of classifiers) {
             if (token.value.startsWith(classifier)) {
+                // Unassigned var check
                 if (unassignedWarning) {
                     const variable = token.value.replace(classifier, "").split(".");
                     if (variable[0] === "!") continue;
 
                     if (   classifier == "<-"
-                        && !variable[0].startsWith("*")
-                        && (variable[1] == undefined || variable[1] == "" || !variable[1].match(/[xyzwrgba0123]/))
-                        && !lowerCaseVariables.includes(variable[0].toLowerCase())) {
+                        && !variable[0].startsWith("*") // Not a global variable
+                        //&& (variable[1] === undefined || variable[1] === "" || !variable[1].match(/[xyzwrgba0123]/))
+                        && !lowerCaseVariables.includes(variable[0].toLowerCase())) { // Variable not known
 
                         const diagnostic = new vscode.Diagnostic(
                             new vscode.Range(document.positionAt(token.position), document.positionAt(token.position + token.value.length)),
