@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.8.4
+- Refactor of tokeniser to hopefully stop weird errors.
+
+## 0.8.3
+- Fixed bug that treated a # in a string as a comment.
+- Fixed bug that broke the tokeniser when a token was at the beginning or end of a file.
+
+## 0.8.2
+- Fixed bug that caused _DATA to not be recognised as a variable.
+
+## 0.8.1
+- Added new commands that weren't included previously.
+- Fixed bug that caused errors for invalid commands inside strings/comments.
+- Made variables, flow control and functions case-insensitive.
+- Fixed refread and refwrite not being recognised as commands.
+- Fixed tokenised values not being reset every time they get updated.
+- Removed string escaping (4rpl doesn't have this).
+- Fixed highlighting of keywords in certain situations.
+
 ## 0.8.0
 - Added warning for use of unassigned variables.
 - Added config option to disable said warning (can be inaccurate when SetScriptVar is used.)
