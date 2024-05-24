@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.8.5
+- Added new commands from version 2.5.1.
+- Made E a constant rather than a function.
+- Streamlined build process.
+
 ## 0.8.4
 - Refactor of tokeniser to hopefully stop weird errors.
 

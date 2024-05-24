@@ -3,7 +3,7 @@
   "displayName": "4rpl-lang",
   "description": "VSCode Language support for Creeper World 4's 4RPL.",
   "publisher": "Up-Level",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -67,17 +67,19 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run esbuild-base -- --minify",
-    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --external:*.node",
-    "compile": "npm run esbuild-base -- --sourcemap",
-    "watch": "npm run esbuild-base -- --sourcemap --watch",
-    "test-compile": "tsc -p ./"
+    "vscode:prepublish": "npm run compile-release",
+    "esbuild": "esbuild ./src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --external:*.node",
+    "neon": "cargo-cp-artifact -a cdylib xrpl_neon out/xrpl.node -- cargo build --message-format=json-render-diagnostics --manifest-path native/xrpl_neon/Cargo.toml -r",
+    "compile": "npm run esbuild -- --sourcemap && npm run neon",
+    "compile-release": "npm run esbuild -- --minify && npm run neon",
+    "watch": "npm run esbuild -- --sourcemap --watch && npm run neon"
   },
   "devDependencies": {
     "@types/node": "^8.10.25",
     "@types/vscode": "^1.71.0",
     "esbuild": "^0.18.11",
     "tslint": "^5.16.0",
+    "cargo-cp-artifact": "^0.1.9",
     "typescript": "^3.4.5"
   }
 }
