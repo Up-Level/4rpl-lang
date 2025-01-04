@@ -1,0 +1,103 @@
+{
+  "name": "irpl",
+  "scopeName": "source.irpl",
+  "patterns": [
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#entities"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#support"
+    }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.irpl",
+          "match": "\\b(?i)(if|endif|else|while|endwhile|repeat|do|loop|case|endcase|switch|endswitch|once|endonce|return|break)\\b"
+        },
+        {
+          "name": "comment.line.number-sign.irpl",
+          "match": "#.*"
+        },
+        {
+          "name": "keyword.operator.arithmetic.irpl",
+          "match": "(?<=[\\s\\[\\(]|^)(\\+|-|\\*|\\/|%|\\^|\\b(?i)(add|sub|mul|div|mod|mod2|pow)\\b)(?=[\\s\\]\\)]|$)"
+        },
+        {
+          "name": "keyword.operator.logic.irpl",
+          "match": "(?<=[\\s\\[\\(]|^)(!|&&|\\|\\||\\b(?i)(and|not|or|xor)\\b)(?=[\\s\\]\\)]|$)"
+        },
+        {
+          "name": "keyword.operator.comparator.irpl",
+          "match": "(?<=[\\s\\[\\(]|^)(==|>|<|>=|<=|!=|\\b(?i)(eq|eq0|gt|gt0|gte|gte0|lt|lt0|lte|lte0|neq|neq0)\\b)(?=[\\s\\]\\)]|$)"
+        }
+      ]
+    },
+    "entities": {
+      "patterns": [
+        {
+          "name": "entity.name.function.define.irpl",
+          "match": ":\\w*"
+        },
+        {
+          "name": "entity.name.function.call.irpl",
+          "match": "@\\w*"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.irpl",
+      "begin": "\"",
+      "end": "\""
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.irpl",
+          "match": "\\b(?i)(true|false|null|e|pi|halfpi|quarterpi|deg2rad|rad2deg|self|tau|threehalvespi|threequarterpi|twopi|vector0|dq|lf|minint|maxint)\\b"
+        },
+        {
+          "name": "constant.numeric.irpl",
+          "match": "(\\-?\\d*\\.?\\d+)"
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.other.initvar.irpl",
+          "match": "\\${1,2}\\w+:"
+        },
+        {
+          "name": "variable.other.iterator.irpl",
+          "match": "(?<=[\\s\\A\\(\\[\\{])(?i)(i|j|k)(?=[\\s\\z\\]\\)])"
+        },
+        {
+          "name": "variable.name.irpl",
+          "match": "(?<=^|[\\s\\(\\[\\{])(?:->|<-|-\\?|--|>|<|\\?|-)\\*?([\\w-]+)(\\.(?i)[xyzwrgba0123])?"
+        }
+      ]
+    },
+    "support": {
+      "patterns": [
+        {
+          "name": "support.function.generic.irpl",
+          "match": "\\b(?i)(Self|GetParent|GetChildren|GetChild|GetName|GetActive|GetDestroyed|SetActive|GetPosition|GetLocalPosition|GetRotation|GetLocalRotation|SetPosition|SetLocalPosition|SetRotation|MoveRotation|TransformPoint|SetLocalRotation|CreateUnit|MoveUnit|SetUnitDirection|RotateUnitTowards|GetUnitUpdateCount|Destroy|IsDestroyActionEnabled|EnableLos|GetLosRange|SetLosRange|GetLosSandPassBits|SetLosSandPassBits|GetLos|EnableRa|GetRaRange|SetRaRange|GetRaPath|EnableTerpScan|GetTerpScanResult|SetHarvestSandDef|GetTerpScanHarvestResult|GetRandPixelDataPos|GetPartData|DefaultConfig|ReadConfig|WriteConfig|GetLog|GetShowRange|SetShowRange|GetShowRangeColor|SetShowRangeColor|SetColor|GetPhysicsVelocity|SetPhysicsVelocity|AddPhysicsForce|GetPixelCount|GetAllPixelCount|GetOnBoardComplete|GetUnitsByName|GetUnitsInRange|GetNullifiableUnitsInRange|GetShotHitUnitsInRange|GetAmmo|SetAmmo|GetMaxAmmo SetMaxAmmo|ConsumeAmmo GetMaxInternalHealth|SetMaxInternalHealth|GetInternalHealth|SetInternalHealth|DamageInternalHealth|GetFowRange|SetFowRange|GetTotalPowerGeneration|GetPowerGeneration|RegisterForMsg|DeregisterForMsg|SendMsg|GetControllerArg|SetControllerArg|GetScriptVar|SetScriptVar|GetScript1Var|SetScript1Var|RegisterScript|DeregisterScript|GetRegisteredScriptVar|SetRegisteredScriptVar|GetNearestCreeper|GetOverCreeper|GetOverAc|GetCreeperOnline|GetDeepestCreeper|GetCreeperInArea|GetCreeperTotal|GetAcTotal|AddCreeper|SetCreeperGravity|SetCreeperMin|SetCreeperGlobalGrowth|DamageCreeper|ConvertCreeperToAc|ConvertAcToCreeper|CreateSandParticle|GetSandParticleCountInRange|GetSandParticle|HasSandParticle|IsSandEmpty|GetSand|CreateSand|CreateSandInRoundArea|CreateSandInAreaRand|CreateSandInArea|GetOverSand|SetSandColor|GetSandDef|GetMapSandCount|CountSandInArea|GetSandInArea|DestroySandInArea|DestroySandFromList|GetSandDefData|TerpLocation|SignedAngle|Rotate|SetDirRight|GetDirUp|SetDirUp|CalculateTrajectoryVelocity|CreateShot|CreateRaRocket|CreateParticulateShot|GetUpgradeBoost|SetUpgradeBoost|GetMissionRequirementsMet|GetCategory|GetGameUpdateCount|ClearConsole|StopConsole|GetArgs|Jump|FlashScreen|ShowInventory|ShowInfoArea|ShowResourceArea|GetShieldsEnabled|SetShieldsEnabled|TerpPaintingEnabled|IsPassable|GetEditMode|QuickSave|QuickLoad|Sys_Operable|GetPause|SetPause|GetCameraPosition|SetCameraPosition|GetCameraZoom|SetCameraZoom|GetScreenSize|GetZoomForWidth|GetPositionInventoryButton|GetPositionTerpControls|GetPositionPauseControl|GetPositionHelpButton|ShowUiIndicator|GetTerpControlsOpen|SetTerpControlsOpen|GetHelpOpen|SetHelpOpen|GetMissionCompletionDialogOpen|GetReturningToOrbit|SetMissionCompletionDialogSuppressed|AwardMissionComplete|MissionLoss|GetApex|SetSuppressApexJump|GetSelectedUnits|HasSelectedUnit|UseLegalUnitCells|SetLegalUnitCells|SetLegalUnitCellsRect|ClearLegalUnitCells|GetMcsItem|SetMcsItem|GetAllMcsKeys|CreateSandExplosion|CreateEffect|CreateBeam|DestroyBeam|SetBeamStart|SetBeamEnd|SetBeamEnabled|SetBeamColor|SetBeamWidth|SetBeamCapVertices|BeamExists|SetBeamAutoDisable|GetMousePos|GetMouseCell|GetMouseButtonDown|GetMouseButtonUp|GetMouseButton|GetKeyDown|GetKey|GetMappedKey|GetMappedKeyDown|GetMappedKeyStrings|SetMoveMapManualMode|CreateFc|DestroyFc|DeployFc|SetFcSave|GetFc|GetFcs|SetFcPosition|SetFcApplyCreeper|SetFcApplyAc|SetFcIsPin|SetFcVisible|FillFcPin|FillFcRadial|FillFcLinear|FillFcIsland|PlaySound|PlaySoundLoop|StopSoundLoop|SetSoundLoopPitch|AddPlanToInventory|RemovePlanFromInventory|GetInventory|HasInventory|ClearInventory|CreateUi|DestroyUi|GetUiExists|SetUiActive|SetUiPosition|SetUiSize|SetUiColor|SetUiBackgroundColor|SetUiText|ShowConversation|GetConversationOpen|ShowBubbleMessage|ShowBubbleMessage_Sound|CloseBubbleMessage|ShowUiHelp|ShowGameMessage|CloseGameMessage|GetGameMessageOpen|CreateSprite|DestroySprite|SetSpriteActive|SetSpriteParent|SetSpriteOrder|SetSpritePosition|SetSpriteRotation|SetSpriteScale|SetSpriteColor|SetSpriteAlpha)\\b"
+        }
+      ]
+    }
+  }
+}

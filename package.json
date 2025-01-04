@@ -1,9 +1,9 @@
 {
   "name": "4rpl-lang",
-  "displayName": "4rpl-lang",
-  "description": "VSCode Language support for Creeper World 4's 4RPL.",
+  "displayName": "xrpl-lang",
+  "description": "VSCode Language support for 4RPL AND IRPL from Creeper World 4 and IXE.",
   "publisher": "Up-Level",
-  "version": "0.8.5",
+  "version": "0.9.0",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -27,7 +27,18 @@
         "extensions": [
           "4rpl"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./configs/4rpl.json"
+      },
+      {
+        "id": "irpl",
+        "aliases": [
+          "IRPL",
+          "irpl"
+        ],
+        "extensions": [
+          "irpl"
+        ],
+        "configuration": "./configs/irpl.json"
       }
     ],
     "grammars": [
@@ -35,6 +46,11 @@
         "language": "4rpl",
         "scopeName": "source.4rpl",
         "path": "./syntaxes/4rpl.tmLanguage.json"
+      },
+      {
+        "language": "irpl",
+        "scopeName": "source.irpl",
+        "path": "./syntaxes/irpl.tmLanguage.json"
       }
     ],
     "commands": [

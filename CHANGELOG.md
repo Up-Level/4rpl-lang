@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.9.0
+- Added syntax highlighting for IRPL. More features will be added once documentation is released and the wiki more complete.
+
 ## 0.8.5
 - Added new commands from version 2.5.1.
 - Made E a constant rather than a function.
