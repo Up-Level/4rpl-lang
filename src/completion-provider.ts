@@ -1,10 +1,18 @@
 import * as vscode from 'vscode';
-import { CommandFinder } from './command-finder';
+import { Command, CommandFinder } from './command-finder';
 
 export class CompletionItemProvider implements vscode.CompletionItemProvider {
-    private readonly variableActionRegex = /(?<=^|\s|[\(\[\{])(->|<-|-\?|--|\${1,2})\*?/ig;
-    private readonly variableRegex = /(?<=^|\s|[\(\[\{])(?:->|<-|-\?|--|\${1,2})\*?([\w-]+)/ig;
-    private readonly functionRegex = /(?<=[:@])\w+/ig;
+    private readonly variableActionRegex;
+    private readonly variableRegex;
+    private readonly functionRegex;
+    private readonly commandFinder;
+
+    constructor(variableActionRegex: RegExp, variableRegex: RegExp, functionRegex: RegExp, commandFinder: CommandFinder | undefined) {
+        this.variableActionRegex = variableActionRegex;
+        this.variableRegex = variableRegex;
+        this.functionRegex = functionRegex;
+        this.commandFinder = commandFinder;
+    }
 
     private variableCompletion(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] | undefined {
         let completionItems: vscode.CompletionItem[] | undefined = [];
@@ -59,12 +67,15 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
     }
 
     private commandCompletion(document: vscode.TextDocument, position: vscode.Position): vscode.CompletionItem[] | undefined {
+        if (this.commandFinder === undefined) return undefined
+
         let completionItems: vscode.CompletionItem[] | undefined = [];
 
         const range = document.getWordRangeAtPosition(position);
         const word = document.getText(range);
 
-        const possibleCompletions = CommandFinder.findPossibleCommandCompletions(word);
+        // Workarond to access static method of given commandFinder
+        const possibleCompletions: Command[] = this.commandFinder.findPossibleCommandCompletions(word);
         for (const completion of possibleCompletions) {
             // @ts-ignore
             const kind = vscode.CompletionItemKind[completion.kind];
@@ -74,8 +85,7 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
         return completionItems;
     }
 
-    public provideCompletionItems(
-        document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.CompletionItem[] | undefined {
+    public provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.CompletionItem[] | undefined {
         let completionItems: vscode.CompletionItem[] | undefined = [];
 
         completionItems = this.variableCompletion(document, position);
@@ -86,5 +96,6 @@ export class CompletionItemProvider implements vscode.CompletionItemProvider {
 
         completionItems = this.commandCompletion(document, position);
         if (completionItems != undefined) return completionItems;
+
     }
 }

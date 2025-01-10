@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.0
+- Full IRPL support. Some commands do not have hover information as their wiki pages do not exist yet.
+- Refactoring of code to support multiple languages.
+
 ## 0.9.0
 - Added syntax highlighting for IRPL. More features will be added once documentation is released and the wiki more complete.
 

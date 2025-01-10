@@ -4,11 +4,6 @@ VSCode Language support for Creeper World 4's 4RPL and Creeper World IXE's IRPL.
 
 ## Features
 
-### IRPL
-- Syntax Highlighting.
-- More features will come once IRPL documentation is released.
-
-### 4RPL
 - Syntax Highlighting.
 - Auto-indentation when creating blocks.
 - Hover information for commands from the game's wiki.

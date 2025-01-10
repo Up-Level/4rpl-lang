@@ -25,8 +25,8 @@ export class Tokeniser {
         this._functions = [];
 
         for (let token of this._tokens) {
-            if (token.value.startsWith("->") && token.value !== "->!") {
-                this._variables.push(token.value.replace("->", ""));
+            if ((token.value.startsWith("->") || token.value.startsWith(">")) && !token.value.endsWith("!")) {
+                this._variables.push(token.value.replace(/->|>/i, ""));
             }
             else if (token.value.startsWith("$") || token.value.startsWith("$$")) {
                 this._variables.push(token.value.replace(/\${1,2}/g, ""));

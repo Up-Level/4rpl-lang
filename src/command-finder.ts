@@ -1,6 +1,3 @@
-import commands from './data/commands.json'
-import specialCommands from './data/special-commands.json'
-
 export type Command = {
     name: string,
     displayName: string,
@@ -11,25 +8,27 @@ export type Command = {
 };
 
 export class CommandFinder {
-    // Joins specialCommands onto the end of commands
-    public static readonly commands = (() => {
-        const cmds = commands;
-        cmds.push(...specialCommands);
-        return cmds
-    })();
-    private static readonly commandNames = commands.map(command => command.displayName);
+    public readonly commands: Command[];
+    private readonly commandNames: string[];
 
-    public static findCommandByName(givenName: String): Command | undefined {
+    constructor(commands: Command[], specialCommands: Command[]) {
+        this.commands = commands;
+        this.commands.push(...specialCommands);
+
+        this.commandNames = this.commands.map(command => command.displayName);
+    }
+
+    public findCommandByName(givenName: String): Command | undefined {
         givenName = givenName.toLowerCase();
         const index = this.commandNames.findIndex(name => name.toLowerCase() == givenName);
 
         if (index != -1) {
-            return commands[index];
+            return this.commands[index];
         }
         return undefined;
     }
 
-    public static findPossibleCommandCompletions(toComplete: string) {
+    public findPossibleCommandCompletions(toComplete: string) {
         return this.commands.filter(command => command.name.toLowerCase().startsWith(toComplete.toLowerCase()));
     }
 }

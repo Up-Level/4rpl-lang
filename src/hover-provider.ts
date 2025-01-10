@@ -2,6 +2,12 @@ import * as vscode from 'vscode';
 import { CommandFinder } from './command-finder';
 
 export class HoverProvider implements vscode.HoverProvider {
+    private readonly commandFinder: CommandFinder;
+    
+    constructor(commandFinder: CommandFinder) {
+        this.commandFinder = commandFinder;
+    }
+
     public provideHover(
         document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
 
@@ -9,7 +15,7 @@ export class HoverProvider implements vscode.HoverProvider {
         const word = document.getText(range).toLowerCase();
 
         // Find the the command corresponding to the hovered word (if it exists).
-        const command = CommandFinder.findCommandByName(word);
+        const command = this.commandFinder.findCommandByName(word);
         if (command == undefined) return;
 
         const hoverText = new vscode.MarkdownString();
