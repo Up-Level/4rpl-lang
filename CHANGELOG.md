@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.1
+- Added new commands from documentation.
+- Fixed bug that caused `>` and `<` to be read as variables with no name.
+
 ## 1.0.0
 - Full IRPL support. Some commands do not have hover information as their wiki pages do not exist yet.
 - Refactoring of code to support multiple languages.

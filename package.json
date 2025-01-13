@@ -3,7 +3,7 @@
   "displayName": "xrpl-lang",
   "description": "VSCode Language support for 4RPL AND IRPL from Creeper World 4 and IXE.",
   "publisher": "Up-Level",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.71.0"
   },

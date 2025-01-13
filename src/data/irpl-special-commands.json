@@ -1,82 +1,42 @@
 [
     {
-        "name": "concat",
-        "displayName": "Concat",
-        "usage": "Concat(\"string1\" \"string2\") ->string3",
-        "description": "<p>Concatenates two strings together.</p>",
-        "url": "/",
-        "kind": "Function"
+        "name": "lf",
+        "displayName": "LF",
+        "usage": "LF",
+        "description": "<p>Pushes a line feed to the stack. Useful for printing.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:lf",
+        "kind": "Constant"
     },
     {
-        "name": "stringlength",
-        "displayName": "StringLength",
-        "usage": "StringLength(<-string) ->length",
-        "description": "<p>Returns the length of the given string.</p>",
-        "url": "/",
-        "kind": "Function"
-    },
-    {
-        "name": "substring",
-        "displayName": "SubString",
-        "usage": "TBD",
-        "description": "TBD",
-        "url": "/",
-        "kind": "Function"
-    },
-    {
-        "name": "concat3",
-        "displayName": "Concat3",
-        "usage": "TBD",
-        "description": "TBD",
-        "url": "/",
-        "kind": "Function"
-    },
-    {
-        "name": "copy",
-        "displayName": "Copy",
-        "usage": "TBD",
-        "description": "TBD",
-        "url": "/",
-        "kind": "Function"
-    },
-    {
-        "name": "deepcopy",
-        "displayName": "DeepCopy",
-        "usage": "TBD",
-        "description": "TBD",
-        "url": "/",
-        "kind": "Function"
-    },
-    {
-        "name": "print",
-        "displayName": "Print",
-        "usage": "TBD",
-        "description": "TBD",
-        "url": "/",
-        "kind": "Function"
+        "name": "cr",
+        "displayName": "CR",
+        "usage": "CR",
+        "description": "<p>Pushes a carriage return to the stack.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:cr",
+        "kind": "Constant"
     },
     {
         "name": "dq",
         "displayName": "DQ",
-        "usage": "TBD",
-        "description": "TBD",
-        "url": "/",
+        "usage": "DQ",
+        "description": "<p>Pushes a double-quote (\") to the stack. This is the only way to create a string containing this character as they are normally used to delineate strings.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:dq",
         "kind": "Constant"
     },
     {
-        "name": "iseditmode",
-        "displayName": "IsEditMode",
-        "usage": "TBD",
-        "description": "TBD",
-        "url": "/",
+        "name": "GetTimeString",
+        "displayName": "GetTimeString",
+        "usage": "GetTimeString(<-frameCount)",
+        "description": "<p>Take a framecount and returns a string representing a time in seconds, accurate to 0.1 seconds.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:gettimestring",
         "kind": "Function"
     },
     {
-        "name": "if",
-        "displayName": "if",
-        "usage": "if (<-var1 eq (<-var2))",
-        "description": "<p>Evaluate the first element on the stack. If True, then execute statements that follow, up to the endif or else statement. If False, execution skips to the first statement following the endif or else statement. Any nonzero value is considered True, a value of zero is False.</p>",
-        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:flow_control:if",
-        "kind": "Keyword"
+        "name": "IsEditMode",
+        "displayName": "IsEditMode",
+        "usage": "IsEditMode ->mode",
+        "description": "<p>TBD</p>",
+        "url": "/",
+        "kind": "Function"
     }
 ]

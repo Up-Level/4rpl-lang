@@ -58,7 +58,7 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
 
         // If token starts with a classifier
         for (const classifier of classifiers) {
-            if (token.value.startsWith(classifier)) {
+            if (token.value.startsWith(classifier) && token.value !== classifier) {
                 // Unassigned var check
                 if (unassignedWarning) {
                     const variable = token.value.replace(classifier, "").split(".");
