@@ -1,0 +1,42 @@
+[
+    {
+        "name": "lf",
+        "displayName": "LF",
+        "usage": "LF",
+        "description": "<p>Pushes a line feed to the stack. Useful for printing.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:lf",
+        "kind": "Constant"
+    },
+    {
+        "name": "cr",
+        "displayName": "CR",
+        "usage": "CR",
+        "description": "<p>Pushes a carriage return to the stack.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:cr",
+        "kind": "Constant"
+    },
+    {
+        "name": "dq",
+        "displayName": "DQ",
+        "usage": "DQ",
+        "description": "<p>Pushes a double-quote (\") to the stack. This is the only way to create a string containing this character as they are normally used to delineate strings.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:dq",
+        "kind": "Constant"
+    },
+    {
+        "name": "GetTimeString",
+        "displayName": "GetTimeString",
+        "usage": "GetTimeString(<-frameCount)",
+        "description": "<p>Take a framecount and returns a string representing a time in seconds, accurate to 0.1 seconds.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:gettimestring",
+        "kind": "Function"
+    },
+    {
+        "name": "IsEditMode",
+        "displayName": "IsEditMode",
+        "usage": "IsEditMode ->mode",
+        "description": "<p>TBD</p>",
+        "url": "/",
+        "kind": "Function"
+    }
+]

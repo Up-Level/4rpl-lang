@@ -1,6 +1,6 @@
 # 4rpl-lang
 
-VSCode Language support for Creeper World 4's 4RPL language.
+VSCode Language support for Creeper World 4's 4RPL and Creeper World IXE's IRPL.
 
 ## Features
 

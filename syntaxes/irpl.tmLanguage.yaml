@@ -1,0 +1,57 @@
+name: irpl
+scopeName: source.irpl
+patterns:
+- include: "#keywords"
+- include: "#entities"
+- include: "#strings"
+- include: "#constants"
+- include: "#variables"
+- include: "#support"
+
+repository:
+  keywords:
+    patterns:
+    - name: keyword.control.irpl
+      match: \b(?i)(if|endif|else|while|endwhile|repeat|do|loop|case|endcase|switch|endswitch|once|endonce|return|break)\b
+    - name: comment.line.number-sign.irpl
+      match: "#.*"
+    - name: keyword.operator.arithmetic.irpl
+      match: (?<=[\s\[\(]|^)(\+|-|\*|\/|%|\^|\b(?i)(add|sub|mul|div|mod|mod2|pow)\b)(?=[\s\]\)]|$)
+    - name: keyword.operator.logic.irpl
+      match: (?<=[\s\[\(]|^)(!|&&|\|\||\b(?i)(and|not|or|xor)\b)(?=[\s\]\)]|$)
+    - name: keyword.operator.comparator.irpl
+      match: (?<=[\s\[\(]|^)(==|>|<|>=|<=|!=|\b(?i)(eq|eq0|gt|gt0|gte|gte0|lt|lt0|lte|lte0|neq|neq0)\b)(?=[\s\]\)]|$)
+  
+  entities:
+    patterns:
+    - name: entity.name.function.define.irpl
+      match: :\w*
+    - name: entity.name.function.call.irpl
+      match: "@\\w*"
+
+  strings:
+    name: string.quoted.double.irpl
+    begin: "\""
+    end: "\""
+
+  constants:
+    patterns:
+    - name: constant.language.irpl
+      match: \b(?i)(true|false|null|e|pi|halfpi|quarterpi|deg2rad|rad2deg|self|tau|threehalvespi|threequarterpi|twopi|vector0|dq|lf|minint|maxint)\b
+    - name: constant.numeric.irpl
+      match: (\-?\d*\.?\d+)
+
+  variables:
+    patterns:
+    - name: variable.other.initvar.irpl
+      match: "\\${1,2}\\w+:"
+    - name: variable.other.iterator.irpl
+      match: (?<=[\s\A\(\[\{])(?i)(i|j|k)(?=[\s\z\]\)])
+    - name: variable.name.irpl
+      match: (?<=^|[\s\(\[\{])(?:->|<-|-\?|--|>|<|\?|-)\*?([\w-]+)(\.(?i)[xyzwrgba0123])?
+
+  support:
+    patterns:
+    - name: support.function.generic.irpl
+      # This is bad, should do this with semantic highlighting
+      match: \b(?i)(AddCreeper|ConvertAcToCreeper|ConvertCreeperToAc|DamageCreeper|GetAcTotal|GetCreeperInArea|GetCreeperOnline|GetCreeperTotal|GetDeepestCreeper|GetNearestCreeper|GetOverAc|GetOverCreeper|SetCreeperGlobalGrowth|SetCreeperGravity|SetCreeperMin|asfloat|asint|asstring|GetType|IsNull|NULL|ClearTraceLog|Debug|DebugAllSp|Trace|Trace2|Trace3|Trace4|Trace5|TraceAll|TraceAllSp|TraceStack|CreateEffect|CreateSandExplosion|CreateFc|DeployFc|DestroyFc|FillFcIsland|FillFcLinear|FillFcPin|FillFcRadial|GetFc|GetFcs|SetFcApplyAc|SetFcApplyCreeper|SetFcIsPin|SetFcPosition|SetFcSave|SetFcVisible|i|j|k|refcall|AwardMissionComplete|ClearConsole|ClearLegalUnitCells|FlashScreen|GetAllMcsKeys|GetApex|GetArgs|GetCameraPosition|GetCameraZoom|GetCategory|GetEditMode|GetGameUpdateCount|GetHelpOpen|GetMcsItem|GetMissionCompletionDialogOpen|GetMissionRequirementsMet|GetPause|GetPositionHelpButton|GetPositionInventoryButton|GetPositionPauseControl|GetPositionTerpControls|GetReturningToOrbit|GetScreenSize|GetSelectedUnits|GetShieldsEnabled|GetTerpControlsOpen|GetUpgradeBoost|GetZoomForWidth|HasSelectedUnit|IsPassable|Jump|MissionLoss|QuickLoad|QuickSave|SetCameraPosition|SetCameraZoom|SetHelpOpen|SetLegalUnitCells|SetLegalUnitCellsRect|SetMcsItem|SetMissionCompletionDialogSuppressed|SetPause|SetShieldsEnabled|SetSuppressApexJump|SetTerpControlsOpen|SetUpgradeBoost|ShowInfoArea|ShowInventory|ShowResourceArea|ShowUiIndicator|StopConsole|Sys_Operable|TerpPaintingEnabled|UseLegalUnitCells|AddPlanToInventory|ClearInventory|GetInventory|HasInventory|RemovePlanFromInventory|GetKey|GetKeyDown|GetMappedKey|GetMappedKeyDown|GetMappedKeyStrings|GetMouseButton|GetMouseButtonDown|GetMouseButtonUp|GetMouseCell|GetMousePos|SetMoveMapManualMode|AppendListToList|AppendStackToList|AppendToList|ClearList|CreateList|CreateListStartingSize|GetGlobalList|GetListCount|GetListElement|GetListIndex|GetListIndices|InsertListElement|List|ListContains|ListN|ListToStack|PopList|PrependListToList|PrependStackToList|PrependToList|PushList|RemoveListElement|ReverseList|SetListElement|SetListElementRPN|StringToList|and|not|or|xor|abs|acos|approximately|asin|atan|atan2|avg2|CalculateTrajectoryVelocity|ceil|cos|floor|GetDirRight|GetDirUp|ln|log|log10|max|MaxInt|min|MinInt|neg|Rotate|round|SetDirRight|SetDirUp|sign|sign0|SignedAngle|sin|sqrt|tan|CloseBubbleMessage|CloseGameMessage|GetConversationOpen|GetGameMessageOpen|ShowBubbleMessage|ShowBubbleMessage_Sound|ShowConversation|ShowGameMessage|ShowUiHelp|CountSandInArea|CreateSand|CreateSandInArea|CreateSandInAreaRand|CreateSandInRoundArea|DestroySandFromList|DestroySandInArea|GetMapSandCount|GetOverSand|GetSand|GetSandDef|GetSandDefData|GetSandInArea|IsSandEmpty|SetSandColor|TerpLocation|CreateSandParticle|GetSandParticle|GetSandParticleCountInRange|HasSandParticle|CreateParticulateShot|CreateRaRocket|CreateShot|PlaySound|PlaySoundLoop|SetSoundLoopPitch|StopSoundLoop|CreateSprite|DestroySprite|SetSpriteActive|SetSpriteAlpha|SetSpriteColor|SetSpriteOrder|SetSpriteParent|SetSpritePosition|SetSpriteRotation|SetSpriteScale|ClearTable|CreateTable|GetGlobalTable|GetTableCount|GetTableElement|GetTableKeys|GetTableValues|RemoveTableElement|SetGlobalTable|SetTableElement|SetTableElementRPN|Table|TableContainsKey|TableN|GetTimer0|GetTimer1|GetTimer2|GetTimer3|SetTimer0|SetTimer1|SetTimer2|SetTimer3|SetTimerObeyPause0|SetTimerObeyPause1|SetTimerObeyPause2|SetTimerObeyPause3|CreateUI|DestroyUI|GetUIExists|SetUIActive|SetUIBackgroundColor|SetUiColor|SetUiPosition|SetUiSize|SetUIText|AddPhysicsForce|ConsumeAmmo|CreateUnit|DamageInternalHealth|DefaultConfig|DeregisterForMsg|DeregisterScript|Destroy|EnableLos|EnableRa|EnableTerpScan|GetActive|GetAllPixelCount|GetAmmo|GetChild|GetChildren|GetControllerArg|GetDestroyed|GetFowRange|GetInternalHealth|GetLocalPosition|GetLocalRotation|GetLog|GetLos|GetLosRange|GetLosSandPassBits|GetMaxAmmo|GetMaxInternalHealth|GetName|GetNullifiableUnitsInRange|GetOnBoardComplete|GetParent|GetPartData|GetPhysicsVelocity|GetPixelCount|GetPosition|GetPowerGeneration|GetRandPixelDataPos|GetRaPath|GetRaRange|GetRegisteredScriptVar|GetRotation|GetScript1Var|GetScriptVar|GetShotHitUnitsInRange|GetShowRange|GetShowRangeColor|GetTerpScanHarvestResult|GetTerpScanResult|GetTotalPowerGeneration|GetUnitsByName|GetUnitsInRange|GetUnitUpdateCount|IsDestroyActionEnabled|MoveRotation|MoveUnit|ReadConfig|RegisterForMsg|RegisterScript|RotateUnitTowards|Self|SendMsg|SetActive|SetAmmo|SetColor|SetControllerArg|SetControllerArg2|SetFowRange|SetHarvestSandDef|SetInternalHealth|SetLocalPosition|SetLocalRotation|SetLosRange|SetLosSandPassBits|SetMaxAmmo|SetMaxInternalHealth|SetPhysicsVelocity|SetPosition|SetRaRange|SetRegisteredScriptVar|SetRotation|SetScript1Var|SetScriptVar|SetShowRange|SetShowRangeColor|SetUnitDirection|TransformPoint|WriteConfig|Cross|Dot|EV2|EV3|EV4|FromCell|Magnitude|Normalize|SqrMagnitude|ToCell|V2|V3|V4|add|div|mod|mod2|mul|pow|sub|BeamExists|CreateBeam|DestroyBeam|SetBeamAutoDisable|SetBeamCapVertices|SetBeamColor|SetBeamEnabled|SetBeamEnd|SetBeamStart|SetBeamWidth|ClearGlobals|ClearLocals|Copy|DeepCopy|NotPersist|ClearStack|dup|dup2|pop|StackSize|swap|Concat|Concat3|Concat4|EndsWith|RemoveWhiteSpace|Split|StartsWith|StringLength|StringReplace|StringToList|Substring|TAB|ToLower|ToUpper|concat|stringlength|substring|concat3|copy|deepcopy|print|iseditmode)\b

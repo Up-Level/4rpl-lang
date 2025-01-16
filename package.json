@@ -1,9 +1,9 @@
 {
   "name": "4rpl-lang",
-  "displayName": "4rpl-lang",
-  "description": "VSCode Language support for Creeper World 4's 4RPL.",
+  "displayName": "xrpl-lang",
+  "description": "VSCode Language support for 4RPL AND IRPL from Creeper World 4 and IXE.",
   "publisher": "Up-Level",
-  "version": "0.8.5",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -27,7 +27,18 @@
         "extensions": [
           "4rpl"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./configs/4rpl.json"
+      },
+      {
+        "id": "irpl",
+        "aliases": [
+          "IRPL",
+          "irpl"
+        ],
+        "extensions": [
+          "irpl"
+        ],
+        "configuration": "./configs/irpl.json"
       }
     ],
     "grammars": [
@@ -35,29 +46,58 @@
         "language": "4rpl",
         "scopeName": "source.4rpl",
         "path": "./syntaxes/4rpl.tmLanguage.json"
+      },
+      {
+        "language": "irpl",
+        "scopeName": "source.irpl",
+        "path": "./syntaxes/irpl.tmLanguage.json"
       }
     ],
     "commands": [
       {
-        "command": "4rpl-lang.read-game-output",
-        "title": "4rpl-lang: Read Game Output"
+        "command": "4rpl-lang.read-cw4-output",
+        "title": "xrpl-lang: Read CW4 Game Output"
+      },
+      {
+        "command": "4rpl-lang.read-ixe-output",
+        "title": "xrpl-lang: Read IXE Game Output"
       }
     ],
     "configuration": [
       {
-        "title": "4rpl",
+        "title": "4RPL",
         "properties": {
           "4rpl.gameDataFolder": {
             "type": "string",
             "default": "${userHome}/Documents/my games/creeperworld4",
-            "description": "Specifies the path to the game's data folder."
+            "description": "Specifies the path to Creeper World 4's data folder."
           },
           "4rpl.rplFileName": {
             "type": "string",
             "default": "RPL.txt",
-            "description": "The name of the game's RPL output file."
+            "description": "The name of Creeper World 4's RPL output file."
           },
           "4rpl.unassignedVarWarning": {
+            "type": "boolean",
+            "default": true,
+            "description": "Toggle the unassigned variable warning."
+          }
+        }
+      },
+      {
+        "title": "IRPL",
+        "properties": {
+          "irpl.gameDataFolder": {
+            "type": "string",
+            "default": "${userHome}/AppData/Roaming/CreeperWorldIXE",
+            "description": "Specifies the path to Creeper World IXE's data folder."
+          },
+          "irpl.rplFileName": {
+            "type": "string",
+            "default": "RPL.txt",
+            "description": "The name of Creeper World IXE's RPL output file."
+          },
+          "irpl.unassignedVarWarning": {
             "type": "boolean",
             "default": true,
             "description": "Toggle the unassigned variable warning."

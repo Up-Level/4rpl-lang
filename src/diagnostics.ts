@@ -2,13 +2,25 @@ import * as vscode from 'vscode';
 import xrpl from "./xrpl.node";
 
 import { CommandFinder } from './command-finder';
-import { aliases, classifiers } from "./data/symbols.json";
 import { Tokeniser } from './tokeniser';
 
-function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.DiagnosticCollection) {
-    if (document.languageId !== "4rpl") return undefined;
+import symbols4RPL from "./data/4rpl-symbols.json";
+import symbolsIRPL from "./data/irpl-symbols.json";
+
+function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.DiagnosticCollection, commandFinder: CommandFinder, language: "4rpl" | "irpl") {
+    if (document.languageId !== language) return undefined;
+
+    let aliases, classifiers;
+    if (language === "4rpl") {
+        aliases = symbols4RPL.aliases;
+        classifiers = symbols4RPL.classifiers;
+    }
+    else {
+        aliases = symbolsIRPL.aliases;
+        classifiers = symbolsIRPL.classifiers;
+    }
     
-    let unassignedWarning = vscode.workspace.getConfiguration("4rpl").get("unassignedVarWarning");
+    let unassignedWarning = vscode.workspace.getConfiguration(language).get("unassignedVarWarning");
 
     /*
     I'm only using rust code because I was already working on it separately, and I realised
@@ -32,7 +44,7 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
             error.message,
             vscode.DiagnosticSeverity.Error
         );
-        diagnostic.source = "4rpl-lang";
+        diagnostic.source = "xrpl-lang";
 
         workingDiagnostics.push(diagnostic);
     }
@@ -46,23 +58,23 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
 
         // If token starts with a classifier
         for (const classifier of classifiers) {
-            if (token.value.startsWith(classifier)) {
+            if (token.value.startsWith(classifier) && token.value !== classifier) {
                 // Unassigned var check
                 if (unassignedWarning) {
                     const variable = token.value.replace(classifier, "").split(".");
                     if (variable[0] === "!") continue;
 
-                    if (   classifier == "<-"
+                    if (   (classifier == "<-" || classifier == "<") // Works the same for both 4RPL and IRPL, good enough
                         && !variable[0].startsWith("*") // Not a global variable
                         //&& (variable[1] === undefined || variable[1] === "" || !variable[1].match(/[xyzwrgba0123]/))
                         && !lowerCaseVariables.includes(variable[0].toLowerCase())) { // Variable not known
 
                         const diagnostic = new vscode.Diagnostic(
                             new vscode.Range(document.positionAt(token.position), document.positionAt(token.position + token.value.length)),
-                            `Use of unassigned variable "${variable[0]}".\nThis warning can be disabled in the extension config by unchecking "4rpl.unassignedVarWarning".`,
+                            `Use of unassigned variable "${variable[0]}".\nThis warning can be disabled in the extension config by unchecking "${language}.unassignedVarWarning".`,
                             vscode.DiagnosticSeverity.Warning
                         )
-                        diagnostic.source = "4rpl-lang"
+                        diagnostic.source = "xrpl-lang"
 
                         workingDiagnostics.push(diagnostic);
                     }
@@ -87,12 +99,12 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
         if (!Number.isNaN(Number(token.value))) continue;
 
         // This is probably intended to be a command, so see if it is invalid
-        if (CommandFinder.findCommandByName(token.value) === undefined) {
+        if (commandFinder.findCommandByName(token.value) === undefined) {
             workingDiagnostics.push(new vscode.Diagnostic(
                 new vscode.Range(document.positionAt(token.position), document.positionAt(token.position + token.value.length)),
                 `Unrecognised command "${token.value}".`,
                 vscode.DiagnosticSeverity.Error
-            ))
+            ));
         }
     }
 
@@ -100,16 +112,16 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
 }
 
 // https://github.com/microsoft/vscode-extension-samples/blob/main/code-actions-sample/src/diagnostics.ts
-export function subscribeDiagnosticChecking(ctx: vscode.ExtensionContext, diagnostics: vscode.DiagnosticCollection) {
+export function subscribeDiagnosticChecking(ctx: vscode.ExtensionContext, diagnostics: vscode.DiagnosticCollection, commandFinder: CommandFinder, language: "4rpl" | "irpl") {
     if (vscode.window.activeTextEditor) {
-        refreshDiagnostics(vscode.window.activeTextEditor.document, diagnostics);
+        refreshDiagnostics(vscode.window.activeTextEditor.document, diagnostics, commandFinder, language);
     }
     
     ctx.subscriptions.push(
         vscode.window.onDidChangeActiveTextEditor(e => {
-            if (e) refreshDiagnostics(e.document, diagnostics);
+            if (e) refreshDiagnostics(e.document, diagnostics, commandFinder, language);
         }),
-        vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, diagnostics)),
+        vscode.workspace.onDidChangeTextDocument(e => refreshDiagnostics(e.document, diagnostics, commandFinder, language)),
         vscode.workspace.onDidCloseTextDocument(e => diagnostics.delete(e.uri))
     );
 }
