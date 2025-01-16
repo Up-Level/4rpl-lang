@@ -13,13 +13,15 @@ export class ColorProvider implements vscode.DocumentColorProvider {
 
         for (const match of vectorMatches) {
             if (match.index) {
-                // Get values of vector from indicies 1-4 or 5-8 depending on whether warp notation was used
+                // Get values of vector from indices 1-4 or 5-8 depending on whether warp notation was used
                 const values = match[1] !== undefined ? match.slice(1, 5) : match.slice(5, 9);
                 const valuesNum = values.map(value => Number(value));
 
                 const range = new vscode.Range(document.positionAt(match.index), document.positionAt(match.index + match[0].length));
 
-                colors.push(new vscode.ColorInformation(range, new vscode.Color(valuesNum[0], valuesNum[1], valuesNum[2], valuesNum[3])));
+                colors.push(
+                    new vscode.ColorInformation(range, new vscode.Color(valuesNum[0], valuesNum[1], valuesNum[2], valuesNum[3]))
+                );
             }
 
         }

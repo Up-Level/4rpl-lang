@@ -10,6 +10,11 @@ static PAIRS: [(&str, &str); 7] = [
     ("switch", "endswitch")
 ];
 
+pub struct Nesting {
+    pub level: usize,
+    pub first_index: usize
+}
+
 #[derive(Debug)]
 pub struct ValidationError {
     pub message: String,
@@ -32,9 +37,9 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
     let mut was_token;
     let mut current_word = String::new();
 
-    let mut pair_nestings: HashMap<&str, (usize, usize)> = HashMap::new();
+    let mut pair_nestings: HashMap<&str, Nesting> = HashMap::new();
     for pair in PAIRS {
-        pair_nestings.insert(pair.0, (0, 0));
+        pair_nestings.insert(pair.0, Nesting { level: 0, first_index: 0 });
     }
 
     while let Some(char) = document.next() {
@@ -87,18 +92,19 @@ pub fn validate(doc_str: &str) -> Vec<ValidationError> {
         });
     }
 
-    for nesting in pair_nestings {
-        // Nested tuples :D
-        if nesting.1.0 != 0 {
+    for (current_pair, nesting) in pair_nestings {
+        if nesting.level != 0 {
             let mut end_pair = "";
             for pair in PAIRS {
-                if pair.0 == nesting.0 {
+                if pair.0 == current_pair {
                     end_pair = pair.1;
                     break;
                 }
             }
             errors.push(ValidationError {
-                message: format!("\"{}\" does not have a corresponding \"{}\".", nesting.0, end_pair), start: nesting.1.1, end: nesting.1.1 + nesting.0.len()
+                message: format!("\"{}\" does not have a corresponding \"{}\".", current_pair, end_pair),
+                start: nesting.first_index,
+                end: nesting.first_index + current_pair.len()
             });
         }
     }
@@ -130,30 +136,24 @@ fn skip_until(to_find: char, chars: &mut Chars, pos: &mut usize) -> bool {
     }
 }
 
-fn check_pairs(word: &str, pos: usize, pair_nestings: &mut HashMap<&str, (usize, usize)>, errors: &mut Vec<ValidationError>) {
-    /*if !word.is_empty() {
-        errors.push(ValidationError {
-            message: word.to_owned(), start: pos - word.len(), end: pos
-        });
-    }*/
-
+fn check_pairs(word: &str, pos: usize, pair_nestings: &mut HashMap<&str, Nesting>, errors: &mut Vec<ValidationError>) {
     for pair in PAIRS {
         if word == pair.0 {
             let nesting = pair_nestings.get_mut(pair.0).unwrap();
-            if nesting.0 == 0 {nesting.1 = pos - word.len()}
+            if nesting.level == 0 {nesting.first_index = pos - word.len()}
 
-            nesting.0 += 1;
+            nesting.level += 1;
         }
         else if word == pair.1 {
             let nesting = pair_nestings.get_mut(pair.0).unwrap();
 
-            if nesting.0 == 0 {
+            if nesting.level == 0 {
                 errors.push(ValidationError {
                     message: format!("\"{}\" does not have a corresponding \"{}\".", pair.1, pair.0), start: pos - word.len(), end: pos
                 });
             }
 
-            if nesting.0 > 0 {nesting.0 -= 1}
+            if nesting.level > 0 {nesting.level -= 1}
         }
     }
 }

@@ -5,3 +5,5 @@ members = [
     "xrpl_neon",
     "xrpl_parser"
 ]
+
+resolver = "2"

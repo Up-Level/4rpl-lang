@@ -86,7 +86,7 @@ fn tokenise(document: &str) -> Vec<Token> {
 
 fn replace_commas_not_in_str(token: &str) -> String {
     if !token.starts_with('"') {
-        return token.replace(r",", "");
+        return token.replace(',', "");
     }
     token.to_string()
 }
