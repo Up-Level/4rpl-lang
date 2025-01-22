@@ -3,7 +3,7 @@
   "displayName": "xrpl-lang",
   "description": "VSCode Language support for 4RPL AND IRPL from Creeper World 4 and IXE.",
   "publisher": "Up-Level",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "engines": {
     "vscode": "^1.71.0"
   },
@@ -112,7 +112,7 @@
     "neon": "cargo-cp-artifact -a cdylib xrpl_neon out/xrpl.node -- cargo build --message-format=json-render-diagnostics --manifest-path native/xrpl_neon/Cargo.toml -r",
     "compile": "npm run esbuild -- --sourcemap && npm run neon",
     "compile-release": "npm run esbuild -- --minify && npm run neon",
-    "watch": "npm run esbuild -- --sourcemap --watch && npm run neon"
+    "watch": "npm run neon && npm run esbuild -- --sourcemap --watch"
   },
   "devDependencies": {
     "@types/node": "^8.10.25",

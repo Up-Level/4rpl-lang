@@ -24,19 +24,11 @@
         "kind": "Constant"
     },
     {
-        "name": "GetTimeString",
-        "displayName": "GetTimeString",
-        "usage": "GetTimeString(<-frameCount)",
-        "description": "<p>Take a framecount and returns a string representing a time in seconds, accurate to 0.1 seconds.</p>",
-        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:strings:gettimestring",
-        "kind": "Function"
-    },
-    {
         "name": "IsEditMode",
         "displayName": "IsEditMode",
-        "usage": "IsEditMode ->mode",
-        "description": "<p>TBD</p>",
-        "url": "/",
+        "usage": "IsEditMode",
+        "description": "<p>Returns a bool indicating if the game is running in edit mode.</p>",
+        "url": "https://knucklecracker.com/wiki/doku.php?id=ixe:irpl:game:geteditmode",
         "kind": "Function"
     }
 ]

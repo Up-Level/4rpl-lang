@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.2
+- Added new commands from documentation.
+- Fixed bug that caused tab groups to be interpreted as command usage (4rpl-command-reader).
+
 ## 1.0.1
 - Added new commands from documentation.
 - Fixed bug that caused `>` and `<` to be read as variables with no name.
