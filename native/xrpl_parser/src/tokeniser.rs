@@ -12,7 +12,7 @@ static COMMENT_REG: Lazy<Regex> = Lazy::new(|| Regex::new(r"#.+").unwrap());
 static PRESERVE_IN_STRING: [char; 4] = ['(',')','#',','];
 static PRESERVE_REG: Lazy<Regex> = Lazy::new(|| Regex::new(r"[\(\)#,]").unwrap());
 
-static STRING_REG: Lazy<Regex> = Lazy::new(|| Regex::new("\".*?\"").unwrap());
+static STRING_REG: Lazy<Regex> = Lazy::new(|| Regex::new("(?m)\"(.|\n)*?\"").unwrap());
 static TOKEN_REG:  Lazy<Regex> = Lazy::new(|| Regex::new("(?m)\"[^\"]*\"|^:\\w+|[^\\s\"\\[\\](){}:]+").unwrap());
 
 /// Splits a given text input into tokens.
@@ -27,6 +27,7 @@ pub fn parse(inp_doc: &str) -> Vec<Token> {
     document = COMMENT_REG.replace_all(&document, |caps: &Captures| {
         " ".repeat(caps[0].len())
     }).to_string();
+    document = document.replace(",", " ");
 
     if is_preserved {
         unpreserve_string(&mut document);
@@ -76,17 +77,10 @@ fn tokenise(document: &str) -> Vec<Token> {
     TOKEN_REG.find_iter(document)
         .map(|t| {
             Token {
-                value: replace_commas_not_in_str(t.as_str()),
+                value: t.as_str().to_string(),
                 position: t.start()
             }
         })
         .filter(|t| !t.value.is_empty())
         .collect()
-}
-
-fn replace_commas_not_in_str(token: &str) -> String {
-    if !token.starts_with('"') {
-        return token.replace(',', "");
-    }
-    token.to_string()
 }

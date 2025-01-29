@@ -1,5 +1,13 @@
 # Change Log
 
+## 1.0.3
+- Added new commands from documentation.
+- Added ref read/write/exists/delete functions.
+- Fixed bug where commas were being interpreted as "" instead of " ".
+- Fixed bug where multi-line strings were not tokenised correctly.
+- Fixed bug causing refread/write to be interpreted as a variable named !.
+- Fixed bug causing i j k variables to not be considered variables if at the start of a new line.
+
 ## 1.0.2
 - Added new commands from documentation.
 - Fixed bug that caused tab groups to be interpreted as command usage (4rpl-command-reader).

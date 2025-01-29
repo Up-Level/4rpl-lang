@@ -61,8 +61,10 @@ function refreshDiagnostics(document: vscode.TextDocument, diagnostics: vscode.D
             if (token.value.startsWith(classifier) && token.value !== classifier) {
                 // Unassigned var check
                 if (unassignedWarning) {
+                    // Edge case nightmare
+
                     const variable = token.value.replace(classifier, "").split(".");
-                    if (variable[0] === "!") continue;
+                    if (variable[0] === "!" || variable[0] === "-!") continue;
 
                     if (   (classifier == "<-" || classifier == "<") // Works the same for both 4RPL and IRPL, good enough
                         && !variable[0].startsWith("*") // Not a global variable
