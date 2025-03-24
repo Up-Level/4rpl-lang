@@ -1,5 +1,9 @@
 # Change Log
 
+## 1.0.4
+- Added new commands from documentation.
+- Automated reading the command index (4rpl-command-reader).
+
 ## 1.0.3
 - Added new commands from documentation.
 - Added ref read/write/exists/delete functions.
