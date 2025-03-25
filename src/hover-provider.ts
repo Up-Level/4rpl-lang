@@ -16,16 +16,21 @@ export class HoverProvider implements vscode.HoverProvider {
         const word = document.getText(range).toLowerCase();
 
         // Check if this word is a local function
-        const localFunction = Tokeniser.functions.find(val => val.value.toLowerCase() === word);
+        const funcIndex = Tokeniser.functions.findIndex(val => val.value.toLowerCase() === word);
+        
+        if (funcIndex !== -1) {
+            const localFunction = Tokeniser.functions[funcIndex];
 
-        if (localFunction !== undefined) {
             const hoverText = new vscode.MarkdownString();
             hoverText.supportHtml = true;
 
-            const text = document.getText().substring(localFunction.position);
+            const text = document.getText();
+            // The end of this function is either the end of the document or the beginning of the next function
+            const endIndex = Tokeniser.functions.length === funcIndex + 1 ? text.length : Tokeniser.functions[funcIndex + 1].position;
+            const functionContent = text.substring(localFunction.position, endIndex);
 
             // Search for annotations
-            const match = text.match(/^[:@]\w+\s+#(.+)(?:\s*\n\s*#([\s\S]+?)\n(?!\s*#.*))?/m);
+            const match = functionContent.match(/^[:@]\w+\s+#(.+)(?:\s*\n\s*#([\s\S]+?)\n(?!\s*#.*))?/m);
             if (match !== null) {
                 hoverText.appendCodeblock(match[1].trim());
                 if (match[2] !== undefined) {

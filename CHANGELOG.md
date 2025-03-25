@@ -1,5 +1,8 @@
 # Change Log
 
+## 1.1.1
+- Hotfix for local function hover information.
+
 ## 1.1.0
 - Added functionality for hover information to be defined for local functions. The syntax for this is as follows:
     ```
