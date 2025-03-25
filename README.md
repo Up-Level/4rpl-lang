@@ -6,7 +6,8 @@ VSCode Language support for Creeper World 4's 4RPL and Creeper World IXE's IRPL.
 
 - Syntax Highlighting.
 - Auto-indentation when creating blocks.
-- Hover information for commands from the game's wiki.
+- Hover information for commands from the KnuckleCracker wiki.
+- Hover information for local functions.
 - Autocomplete for built-in commands, local variables and functions.
 - Rudimentary Error diagnostics.
 - Colour picker for Vector 4 values.
@@ -16,8 +17,9 @@ VSCode Language support for Creeper World 4's 4RPL and Creeper World IXE's IRPL.
 ### Syntax Highlighting
 ![Syntax Highlighting](./images/syntax-highlighting.png)
 
-### Wiki on Hover
+### Hover for built-in and local Functions
 ![Wiki Hover](./images/wiki-hover.png)
+![Local Function Hover](./images/function-hover.png)
 
 ### Variable Autocomplete
 ![Variable Autocomplete](./images/variable-autocomplete.png)

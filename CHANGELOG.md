@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.1.0
+- Added functionality for hover information to be defined for local functions. The syntax for this is as follows:
+    ```
+    :Function
+        # @FunctionParameters(<-param1 <-param2)
+        # This is a description for the function.
+        # It can be multi-line. It also supports **markdown** (except headings).
+    ```
+
 ## 1.0.4
 - Added new commands from documentation.
 - Automated reading the command index (4rpl-command-reader).
